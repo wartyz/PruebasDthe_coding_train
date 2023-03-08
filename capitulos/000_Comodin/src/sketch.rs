@@ -12,6 +12,12 @@ pub struct Sketch {
     // Variables globales del scketch
 }
 
+impl Default for Sketch {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Sketch {
     pub fn new() -> Sketch {
         let mut engine = Engine::new(ANCHO as f32, ALTO as f32);

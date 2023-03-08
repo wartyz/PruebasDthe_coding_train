@@ -5,6 +5,7 @@ pub use sdl2::render::Canvas;
 pub use sdl2::video::Window;
 use sdl2::Sdl;
 use crate::parametros::*;
+use crate::transform::identity3x3;
 
 pub struct Engine {
     pub sdl_context: Option<Sdl>,
@@ -30,6 +31,10 @@ impl Engine {
     }
 
     pub fn update(&mut self) -> bool {
+        self.reinicia_matrices();
+        //self.reinicia_vertex();
+        self.reinicia_teclado();
+        self.reinicia_raton();
         // Crea contexto SDL2
         let sdl_context = self.sdl_context.as_ref().unwrap();
         let mut event_pump = sdl_context.event_pump().unwrap();
@@ -54,7 +59,10 @@ impl Engine {
 
                     self.param.mouse_boton_mantiene = CodigosRaton::Izquierdo;
                 }
-                Event::MouseMotion { x, y, .. } => {}
+                Event::MouseMotion { x, y, .. } => {
+                    self.param.mouse_posicion.x = x as f32;
+                    self.param.mouse_posicion.y = y as f32;
+                }
 
                 Event::KeyUp {
                     keycode: Some(keycode),
@@ -99,5 +107,34 @@ impl Engine {
         }
 
         true
+    }
+
+    pub fn reinicia_matrices(&mut self) {
+        //        self.param.matriz_traslacion = identity3x3();
+        //        self.param.matriz_rotacionx = identity3x3();
+        //        self.param.matriz_rotaciony = identity3x3();
+        //        self.param.matriz_rotacionz = identity3x3();
+        //        self.param.matriz_rotacionxyz = identity3x3();
+        //        self.param.matriz_escala = identity3x3();
+        self.param.matriz_total = identity3x3();
+        //self.param.matriz_total3d = identity4x4();
+    }
+
+    /*    // Aqui se reinicia en arreglo vertex: Vec<Vector2> para shapes
+        pub fn reinicia_vertex(&mut self) {
+            self.param.vertex.clear();
+        }*/
+
+    // Aqui se reinicia en el indicador de tecla presionad
+    pub fn reinicia_teclado(&mut self) {
+        self.param.key = CodigosTecla::NadaTecla;
+        self.param.keyr = CodigosTecla::NadaTecla;
+    }
+
+    // Aqui se reinicia en el indicador de boton de raton presionado
+    pub fn reinicia_raton(&mut self) {
+        self.param.mouse_boton_inicio = CodigosRaton::NadaRaton;
+        self.param.mouse_boton_mantiene = CodigosRaton::NadaRaton;
+        self.param.mouse_boton_final = CodigosRaton::NadaRaton;
     }
 }

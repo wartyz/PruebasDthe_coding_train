@@ -2,6 +2,7 @@ use std::env::current_dir;
 use libfinal::environment::size;
 use sketch::Sketch;
 
+pub mod star;
 pub mod sketch;
 
 use libfinal::test;
@@ -13,6 +14,7 @@ fn main() {
     game.pre_load(); // Se ejecuta antes que setup()
 
     let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
+    game.setup();
 
     // Bucle principal ***********************************************************************
     'main_loop: loop {

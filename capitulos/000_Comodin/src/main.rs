@@ -14,6 +14,8 @@ fn main() {
 
     let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
 
+    game.setup();
+
     // Bucle principal ***********************************************************************
     'main_loop: loop {
         if !game.update() {
