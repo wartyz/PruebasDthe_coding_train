@@ -110,14 +110,7 @@ impl Engine {
     }
 
     pub fn reinicia_matrices(&mut self) {
-        //        self.param.matriz_traslacion = identity3x3();
-        //        self.param.matriz_rotacionx = identity3x3();
-        //        self.param.matriz_rotaciony = identity3x3();
-        //        self.param.matriz_rotacionz = identity3x3();
-        //        self.param.matriz_rotacionxyz = identity3x3();
-        //        self.param.matriz_escala = identity3x3();
         self.param.matriz_total = identity3x3();
-        //self.param.matriz_total3d = identity4x4();
     }
 
     /*    // Aqui se reinicia en arreglo vertex: Vec<Vector2> para shapes

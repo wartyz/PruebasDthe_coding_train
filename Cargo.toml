@@ -2,5 +2,6 @@
 members = [
     "libfinal",
     "capitulos/000_Comodin",
-    "capitulos/001_Starfield"
+    "capitulos/001_Starfield",
+    "capitulos/002_Menger_Sponge_Fractal"
 ]

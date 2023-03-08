@@ -28,7 +28,7 @@ impl Default for Sketch {
 
 impl Sketch {
     pub fn new() -> Sketch {
-        let mut engine = Engine::new(ANCHO as f32, ALTO as f32);
+        let engine = Engine::new(ANCHO as f32, ALTO as f32);
 
         Sketch {
             engine,
