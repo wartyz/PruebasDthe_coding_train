@@ -1,5 +1,6 @@
 use libfinal::engine::{Canvas, Engine, Window};
 use libfinal::environment::full_screen;
+use libfinal::matem::{dist_s, PVector4, pvector4};
 
 // Ancho y alto de la pantalla
 pub const ANCHO: u32 = 600;
@@ -8,6 +9,7 @@ pub const ALTO: u32 = 400;
 // Aqui vendrá el pseudocódigo javascript
 pub struct Sketch {
     pub engine: Engine,
+    distancia_camara: f32,
 
     // Variables globales del scketch
 }
@@ -24,8 +26,19 @@ impl Sketch {
 
         engine.param.ancho = ANCHO as f32;
         engine.param.alto = ALTO as f32;
+
+        let distancia_camara = dist_s(
+            &PVector4::default(),
+            &pvector4(
+                engine.param.camara.posx,
+                engine.param.camara.posy,
+                engine.param.camara.posz,
+                1.0,
+            ),
+        );
         Sketch {
             engine,
+            distancia_camara,
         }
     }
     pub fn pre_load(&mut self) {

@@ -3,6 +3,7 @@ use libfinal::environment::size;
 use sketch::Sketch;
 
 pub mod sketch;
+pub mod boxy;
 
 use libfinal::test;
 
