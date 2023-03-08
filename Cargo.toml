@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "libfinal",
+    "capitulos/000_Comodin",
+    "capitulos/001_Starfield"
+]

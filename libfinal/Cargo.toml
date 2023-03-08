@@ -1,0 +1,19 @@
+[package]
+name = "libfinal"
+version = "0.1.0"
+authors = ["wartyz <zwenderk@hotmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+
+
+#sdl2 = { version = "0.35.2", features = ["ttf", "image", "mixer", "gfx"] }
+
+
+[dependencies.sdl2]
+version = "0.35.2"
+default-features = false
+features = ["ttf", "image", "mixer", "gfx"]
