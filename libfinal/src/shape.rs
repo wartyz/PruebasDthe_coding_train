@@ -51,7 +51,7 @@ use std::ops::Mul;
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use crate::parametros::Parametros;
+use crate::parametros::{Parametros, RectMode};
 use crate::matem::*;
 use crate::transform::{identity3x3, Matrix3x3};
 
@@ -184,7 +184,92 @@ pub fn point() { unimplemented!(); }
 
 pub fn quad() { unimplemented!(); }
 
-pub fn rect() { unimplemented!(); }
+// Dibuja un rectángulo
+pub fn rect(
+    canvas: &mut Canvas<Window>,
+    param: &mut Parametros,
+    mut x_vieja: f32,
+    mut y_vieja: f32,
+    ancho: f32,
+    alto: f32,
+) {
+    if param.rect_mode == RectMode::Center {
+        x_vieja -= ancho / 2.;
+        y_vieja -= alto / 2.;
+    }
+
+    // Para la escala aplicamos matriz escala al ancho y alto
+    //println!("en shapes:ellipse antes ancho = {:#?} alto = {:#?}", ancho, alto);
+    //let r = product_matrix_v3(&param.matriz_escala, &Vector2::new(ancho, alto));
+    //println!("En shapes:rect   r={:#?}", r);
+
+    let p = param.matriz_total * pvector3(x_vieja, y_vieja, 0.0);
+
+    let st = sdl2::pixels::Color::RGBA(
+        param.stroke_color.r,
+        param.stroke_color.g,
+        param.stroke_color.b,
+        param.stroke_color.a,
+    );
+
+    let fi = sdl2::pixels::Color::RGBA(
+        param.fill_color.r,
+        param.fill_color.g,
+        param.fill_color.b,
+        param.fill_color.a,
+    );
+
+    let error = 0.01f32; // Para comparaciones de f32
+    if (param.stroke_weight - 1.0).abs() < error {
+        // Valor por defecto
+        if param.fill_bool {
+            canvas.set_draw_color(fi);
+            let _ = canvas.fill_rect(sdl2::rect::Rect::new(
+                p.x as i32,
+                p.y as i32,
+                ancho as u32,
+                alto as u32,
+            ));
+        }
+
+        if param.stroke_bool {
+            let _ = canvas.rectangle(
+                p.x as i16,
+                p.y as i16,
+                p.x as i16 + ancho as i16,
+                p.y as i16 + alto as i16,
+                st,
+            );
+        }
+    } else {
+        //# If the penwidth is larger than 1, things become a bit more complex.
+        let inner_r1 = ancho - param.stroke_weight * 0.5;
+        let inner_r2 = alto - param.stroke_weight * 0.5;
+
+        let num_pasos = (2.0 * param.stroke_weight) as usize;
+        for n in 0..num_pasos {
+            if param.fill_bool {
+                let _ = canvas.filled_ellipse(
+                    p.x as i16,
+                    p.y as i16,
+                    (inner_r1 + n as f32 * 0.5) as i16,
+                    (inner_r2 + n as f32 * 0.5) as i16,
+                    fi,
+                );
+            }
+            if param.stroke_bool {
+                let _ = canvas.aa_ellipse(
+                    p.x as i16,
+                    p.y as i16,
+                    (inner_r1 + n as f32 * 0.5) as i16,
+                    (inner_r2 + n as f32 * 0.5) as i16,
+                    st,
+                );
+            }
+        }
+    }
+    //canvas.present();  // No se si debe estar aqui
+}
 
 pub fn square() { unimplemented!(); }
 

@@ -135,7 +135,9 @@ pub fn dist_s(a: &PVector4, b: &PVector4) -> f32 {
 
 pub fn exp() { unimplemented!(); }
 
-pub fn floor() { unimplemented!(); }
+pub fn floor(v: f32) -> f32 {
+    v.floor()
+}
 
 pub fn lerp() { unimplemented!(); }
 
