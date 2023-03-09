@@ -239,3 +239,18 @@ pub fn random_range(p0: f32, p1: f32) -> f32 {
 
     rng.gen_range(p0, p1)
 }
+
+pub fn random_i32_range(p0: i32, p1: i32) -> i32 {
+    let mut rng = rand::thread_rng();
+    rng.gen_range(p0, p1)
+}
+
+pub fn random_i32(p0: i32) -> i32 {
+    let mut rng = rand::thread_rng();
+    rng.gen_range(0, p0)
+}
+
+pub fn random_usize(p0: usize) -> usize {
+    let mut rng = rand::thread_rng();
+    rng.gen_range(0, p0)
+}
