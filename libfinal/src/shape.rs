@@ -49,6 +49,7 @@ Loading & Display
 
 use std::ops::Mul;
 use sdl2::gfx::primitives::DrawRenderer;
+use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use crate::parametros::{Parametros, RectMode};
@@ -63,8 +64,40 @@ pub fn create_shape() { unimplemented!(); }
 pub fn load_shape() { unimplemented!(); }
 
 // 2d Primitives *******************************
+
+pub fn arc(canvas: &mut Canvas<Window>, param: &mut Parametros, cx: i32, cy: i32, r: i32, start_a: f32, end_a: f32) {
+    let step = std::f32::consts::FRAC_PI_2 / 10.; // Tamaño del ángulo de cada línea recta
+    let mut prev_x = (cx as f32 + r as f32 * start_a.cos()) as i32;
+    let mut prev_y = (cy as f32 - r as f32 * start_a.sin()) as i32;
+
+    // Creo un range para usar en f32
+    let range = std::iter::successors(Some(start_a + step), move |&x| {
+        if x + step < end_a {
+            Some(x + step)
+        } else {
+            None
+        }
+    });
+
+    for angle in range {
+        let x = (cx as f32 + r as f32 * angle.cos()) as i32;
+        let y = (cy as f32 - r as f32 * angle.sin()) as i32;
+
+        let st = sdl2::pixels::Color::RGBA(
+            param.stroke_color.r,
+            param.stroke_color.g,
+            param.stroke_color.b,
+            param.stroke_color.a,
+        );
+        canvas.thick_line(prev_x as i16, prev_y as i16, x as i16, y as i16, 4, st);
+
+        prev_x = x;
+        prev_y = y;
+    }
+}
+
 // Draw a piece of a circle FUNCION PROVISIONAL
-pub fn arc(
+pub fn arc_mal(
     param: &mut Parametros,
     canvas: &mut Canvas<Window>,
     x_vieja: f32,
@@ -75,6 +108,9 @@ pub fn arc(
     stop: f32,  // angulo final
 ) {
     let p = param.matriz_total * pvector3(x_vieja, y_vieja, 1.0); // punto w = 1
+
+
+
 
     /*if param.fill_bool {
         d.draw_circle_sector(
@@ -211,7 +247,7 @@ pub fn ellipse(
     }
 }
 
-/// Dibuja una linea
+// Dibuja una linea
 pub fn line(
     canvas: &mut Canvas<Window>,
     param: &mut Parametros,

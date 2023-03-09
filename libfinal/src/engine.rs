@@ -56,13 +56,10 @@ impl Engine {
                     //mouse_btn: MouseButton::Left,
                     ..
                 } => {
-                    println!("MouseButtonWhell");
-                    dbg!(x);
-                    dbg!(y);
+                    //println!("MouseButtonWhell");
+                    //dbg!(x);
+                    //dbg!(y);
                     self.param.mouse_rueda_y = y as f32;
-                    //self.param.mousex = x as f32;
-                    //self.param.mousey = y as f32;
-                    //self.param.mouse_boton_mantiene = CodigosRaton::Izquierdo;
                 }
 
                 Event::MouseButtonDown {
