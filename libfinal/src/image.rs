@@ -78,9 +78,15 @@ texturas
 
 
  */
+use std::error::Error;
+use std::path::Path;
 use sdl2::rect::Rect;
-use sdl2::render::{Canvas, WindowCanvas, Texture, TextureCreator};
+use sdl2::render::{Canvas, WindowCanvas, Texture, TextureCreator, BlendMode};
+use sdl2::surface::Surface;
 use sdl2::video::{Window, WindowContext};
+use sdl2::image::LoadTexture;
+use sdl2::pixels::{Color, PixelFormatEnum};
+use sdl2::pixels::PixelFormatEnum::ARGB8888;
 use crate::color::PColor;
 /* **********************  Image   ****************************************************/
 #[derive(Debug, Clone, Default)]
@@ -179,17 +185,13 @@ impl PImage {
     pub fn set() { unimplemented!(); }
 
     // Actualiza la ventana de visualización con los datos del arreglo en Self de image.
-    // Úselo junto con loadPixels().  Si solo está leyendo píxeles del vector,
-    // no es necesario llamar a updatePixels(); la actualización solo es necesaria para aplicar los cambios.
+
     pub fn update_pixels(&self, canvas: &mut Canvas<Window>) {
-        // -> Result<(), Box<dyn Error>> {
         let texture_creator: TextureCreator<_> = canvas.texture_creator();
         let mut texture: Texture = texture_creator
             .create_texture_streaming(None, self.image_width, self.image_height)
             .unwrap();
 
-        // Lock texture for writing
-        let mut texture_buffer: Vec<u8> = vec![0; 640 * 480 * 4];
         texture
             .with_lock(None, |buffer: &mut [u8], _: usize| {
                 //dbg!(self.image.len());
@@ -198,19 +200,30 @@ impl PImage {
                     //dbg!(self.image[y].len());
                     for x in 0..self.image[y].len() {
                         //for x in 0..self.image_height as usize {
-                        //dbg!(x);
-                        //dbg!(y);
+                        // dbg!(x);
+                        // dbg!(y);
                         let index = (y * self.image_width as usize + x) * 4;
                         //let index = y * 4;
                         //dbg!(index);
-                        buffer[index] = self.image[y][x].0;
+                        //dbg!(self.image[y][x].0);
+                        /*buffer[index] = self.image[y][x].0;
                         buffer[index + 1] = self.image[y][x].1;
                         buffer[index + 2] = self.image[y][x].2;
-                        buffer[index + 3] = self.image[y][x].3;
+                        buffer[index + 3] = self.image[y][x].3;*/
+                        buffer[index] = self.image[y][x].0; // B
+                        buffer[index + 1] = self.image[y][x].1; // G
+                        buffer[index + 2] = self.image[y][x].2; // R
+                        buffer[index + 3] = self.image[y][x].3; // A
                     }
                 }
             })
             .expect("Error en update_pixels");
+
+        // Renderiza la textura en la ventana
+        canvas.set_blend_mode(BlendMode::Blend);
+
+        let dst_rect = Rect::new(0, 0, self.image_width, self.image_height);
+        canvas.copy(&texture, None, dst_rect).unwrap();
     }
 
 // Loading & Displaying ********************************
@@ -219,7 +232,74 @@ impl PImage {
 
     pub fn image() { unimplemented!(); }
 
-    pub fn load_image() { unimplemented!(); }
+    // Carga una imagen en una variable de tipo PImage.
+    // Solo carga .bmp   debe ser de formato ARGB8888
+    pub fn load_image(
+        canvas: &mut Canvas<Window>,
+        filename: &str,
+    ) -> Result<(PImage), Box<dyn Error>> {
+        let texture_creator = canvas.texture_creator();
+        let path = Path::new(filename);
+        dbg!(path);
+
+        let mut texture = texture_creator.load_texture(path).unwrap();
+        let format = texture.query().format;
+        let image_width = texture.query().width;
+        let image_height = texture.query().height;
+
+        dbg!(image_width);
+        dbg!(image_height);
+
+        let surface = Surface::load_bmp(filename).unwrap();
+        //dbg!(surface.pixel_format_enum());
+        let pixels = surface.without_lock().unwrap();
+        //dbg!(pixels.len());
+        println!("Path {:?}", Path::new(filename));
+        println!(
+            "width, height, pitch, size ({:?}, {:?}, {:?}, {:?})",
+            surface.width(),
+            surface.height(),
+            surface.pitch(),
+            surface.size()
+        );
+        println!("raw_pixel_data u8 length {:?}", pixels.len());
+
+        //let bpp = pixels.len() as u32 / (surface.height() * surface.pitch());
+        //println!("bytes per pixel: {:?}", bpp);
+
+        // Creamos un vector para contener los datos de la imagen.
+        // let mut image: Vec<Vec<(u8, u8, u8, u8)>> =
+        //     vec![vec![(0, 0, 0, 0); image_width as usize]; image_height as usize];
+
+        let mut image: Vec<Vec<(u8, u8, u8, u8)>> = vec![];
+        for y in 0..image_height as usize {
+            let mut vv = vec![];
+            for x in 0..image_width as usize {
+                let index = (y * image_width as usize + x) * 4;
+
+                let valor = (
+                    pixels[index],
+                    pixels[index + 1],
+                    pixels[index + 2],
+                    pixels[index + 3],
+                );
+
+                vv.push(valor);
+            }
+
+            image.push(vv);
+        }
+
+        // dbg!(image_width);
+        // dbg!(image_height);
+        // dbg!(pixels.len());
+        Ok(PImage {
+            image,
+            image_width,
+            image_height,
+            tint: (255, 255, 255),
+        })
+    }
 
     pub fn no_tint() { unimplemented!(); }
 
