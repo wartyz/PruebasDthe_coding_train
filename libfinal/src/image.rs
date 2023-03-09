@@ -83,10 +83,8 @@ use std::path::Path;
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, WindowCanvas, Texture, TextureCreator, BlendMode};
 use sdl2::surface::Surface;
-use sdl2::video::{Window, WindowContext};
+use sdl2::video::{Window};
 use sdl2::image::LoadTexture;
-use sdl2::pixels::{Color, PixelFormatEnum};
-use sdl2::pixels::PixelFormatEnum::ARGB8888;
 use crate::color::PColor;
 /* **********************  Image   ****************************************************/
 #[derive(Debug, Clone, Default)]
@@ -237,13 +235,13 @@ impl PImage {
     pub fn load_image(
         canvas: &mut Canvas<Window>,
         filename: &str,
-    ) -> Result<(PImage), Box<dyn Error>> {
+    ) -> Result<PImage, Box<dyn Error>> {
         let texture_creator = canvas.texture_creator();
         let path = Path::new(filename);
         dbg!(path);
 
-        let mut texture = texture_creator.load_texture(path).unwrap();
-        let format = texture.query().format;
+        let texture = texture_creator.load_texture(path).unwrap();
+        let _format = texture.query().format;
         let image_width = texture.query().width;
         let image_height = texture.query().height;
 

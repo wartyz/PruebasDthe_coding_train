@@ -5,8 +5,6 @@ use sketch::Sketch;
 pub mod sketch;
 pub mod boxy;
 
-use libfinal::test;
-
 fn main() {
     println!("directorio actual = {:?}", current_dir());
 

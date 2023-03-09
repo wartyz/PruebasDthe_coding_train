@@ -157,7 +157,8 @@ pub struct Parametros {
     pub mouse_boton_mantiene: CodigosRaton,
     pub mouse_boton_final: CodigosRaton,
 
-    pub mouse_rueda: f32,
+    pub mouse_rueda_x: f32,
+    pub mouse_rueda_y: f32,
 
     pub matriz_total: Matrix3x3,
     pub matriz_total3d: Matrix4x4,
@@ -232,7 +233,8 @@ impl Parametros {
             mouse_boton_mantiene: CodigosRaton::NadaRaton,
             mouse_boton_final: CodigosRaton::NadaRaton,
 
-            mouse_rueda: 0.0,
+            mouse_rueda_x: 0.,
+            mouse_rueda_y: 0.,
             matriz_total: identity3x3(),
             matriz_total3d: identity4x4(),
             matriz_stack: vec![],

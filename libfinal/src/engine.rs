@@ -7,8 +7,6 @@ use sdl2::Sdl;
 use crate::parametros::*;
 use crate::transform::identity3x3;
 
-use test;
-
 pub struct Engine {
     pub sdl_context: Option<Sdl>,
     pub param: Parametros,
@@ -51,6 +49,22 @@ impl Engine {
                 } => {
                     return false;
                 }
+
+                Event::MouseWheel {
+                    x,
+                    y,
+                    //mouse_btn: MouseButton::Left,
+                    ..
+                } => {
+                    println!("MouseButtonWhell");
+                    dbg!(x);
+                    dbg!(y);
+                    self.param.mouse_rueda_y = y as f32;
+                    //self.param.mousex = x as f32;
+                    //self.param.mousey = y as f32;
+                    //self.param.mouse_boton_mantiene = CodigosRaton::Izquierdo;
+                }
+
                 Event::MouseButtonDown {
                     x: _,
                     y: _,
@@ -131,5 +145,7 @@ impl Engine {
         self.param.mouse_boton_inicio = CodigosRaton::NadaRaton;
         self.param.mouse_boton_mantiene = CodigosRaton::NadaRaton;
         self.param.mouse_boton_final = CodigosRaton::NadaRaton;
+        self.param.mouse_rueda_y = 0.;
+        self.param.mouse_rueda_x = 0.;
     }
 }

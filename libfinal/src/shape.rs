@@ -63,9 +63,69 @@ pub fn create_shape() { unimplemented!(); }
 pub fn load_shape() { unimplemented!(); }
 
 // 2d Primitives *******************************
-pub fn arc() { unimplemented!(); }
+// Draw a piece of a circle FUNCION PROVISIONAL
+pub fn arc(
+    param: &mut Parametros,
+    canvas: &mut Canvas<Window>,
+    x_vieja: f32,
+    y_vieja: f32,
+    ancho: f32,
+    alto: f32,
+    start: f32, // angulo inicial
+    stop: f32,  // angulo final
+) {
+    let p = param.matriz_total * pvector3(x_vieja, y_vieja, 1.0); // punto w = 1
 
-pub fn circle() { unimplemented!(); }
+    /*if param.fill_bool {
+        d.draw_circle_sector(
+            raylib::prelude::Vector2::new(p.x, p.y),
+            ancho, // OJO provisional, solo uso ancho
+            start,
+            stop,
+            100, // OJO provisional
+            param.stroke_color.to_color_raylib(),
+        );
+    }
+    if param.stroke_bool {
+        d.draw_circle_sector_lines(
+            raylib::prelude::Vector2::new(p.x, p.y),
+            ancho, // OJO provisional, solo uso ancho
+            start,
+            stop,
+            100, // OJO provisional
+            param.stroke_color.to_color_raylib(),
+        );
+
+        // Si hay ancho añade alternativamente fuera/dentro otro circulo
+        if param.stroke_weight > 1.0 {
+            let kk = param.stroke_weight as usize;
+            let mut signo = 1;
+            let mut nn: f32;
+            for i in 1..(kk + 1) {
+                nn = (((i + 1) / 2) as i32 * signo) as f32;
+                let radioa = (ancho / 2.0) + nn;
+                let _radiob = (alto / 2.0) + nn;
+                signo = signo * -1;
+                d.draw_circle_sector_lines(
+                    raylib::prelude::Vector2::new(p.x, p.y),
+                    radioa,
+                    start,
+                    stop,
+                    100, // OJO provisional
+                    param.stroke_color.to_color_raylib(),
+                );
+            }
+        }
+    }*/
+}
+
+pub fn circle(canvas: &mut Canvas<Window>,
+              param: &mut Parametros,
+              x_vieja: f32,
+              y_vieja: f32,
+              radio: f32, ) {
+    ellipse(canvas, param, x_vieja, y_vieja, radio, radio);
+}
 
 // Dibuja una elipse
 pub fn ellipse(
@@ -180,9 +240,47 @@ pub fn line(
     );
 }
 
-pub fn point() { unimplemented!(); }
+pub fn point(canvas: &mut Canvas<Window>, param: &Parametros, x: f32, y: f32) {
+    let c = sdl2::pixels::Color::RGBA(
+        param.stroke_color.r,
+        param.stroke_color.g,
+        param.stroke_color.b,
+        param.stroke_color.a,
+    );
+    let error = 0.01f32; // Para comparaciones de f32
 
-pub fn quad() { unimplemented!(); }
+    if (param.stroke_weight - 1.0).abs() < error {
+        let _ = canvas.pixel(x as i16, y as i16, c);
+    } else {
+        let _ = canvas.filled_circle(x as i16, y as i16, (param.stroke_weight / 2.0) as i16, c);
+    }
+}
+
+// Dibuja un cuadrilátero
+pub fn quad(
+    canvas: &mut Canvas<Window>,
+    param: &mut Parametros,
+    x1_vieja: f32,
+    y1_vieja: f32,
+    x2_vieja: f32,
+    y2_vieja: f32,
+    x3_vieja: f32,
+    y3_vieja: f32,
+    x4_vieja: f32,
+    y4_vieja: f32,
+) {
+    // let _p1 = param.matriz_total * pvector3(x1_vieja, y1_vieja, 1.0);
+    // let _p2 = param.matriz_total * pvector3(x2_vieja, y2_vieja, 1.0);
+    // let _p3 = param.matriz_total * pvector3(x3_vieja, y3_vieja, 1.0);
+    // let _p4 = param.matriz_total * pvector3(x4_vieja, y4_vieja, 1.0);
+
+    if param.stroke_bool {
+        line(canvas, param, x1_vieja, y1_vieja, x2_vieja, y2_vieja);
+        line(canvas, param, x2_vieja, y2_vieja, x3_vieja, y3_vieja);
+        line(canvas, param, x3_vieja, y3_vieja, x4_vieja, y4_vieja);
+        line(canvas, param, x4_vieja, y4_vieja, x1_vieja, y1_vieja);
+    }
+}
 
 // Dibuja un rectángulo
 pub fn rect(
@@ -271,7 +369,15 @@ pub fn rect(
     //canvas.present();  // No se si debe estar aqui
 }
 
-pub fn square() { unimplemented!(); }
+pub fn square(
+    canvas: &mut Canvas<Window>,
+    param: &mut Parametros,
+    mut x_vieja: f32,
+    mut y_vieja: f32,
+    lado: f32,
+) {
+    rect(canvas, param, x_vieja, y_vieja, lado, lado)
+}
 
 pub fn triangle() { unimplemented!(); }
 

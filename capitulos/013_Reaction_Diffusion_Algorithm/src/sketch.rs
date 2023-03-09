@@ -2,7 +2,7 @@ use libfinal::color::pcolor4;
 use libfinal::engine::{Canvas, Engine, Window};
 use libfinal::environment::full_screen;
 use libfinal::matem::{constrain, floor};
-use libfinal::image::{pcolor_to_tupla, pcolor_to_vector, PImage};
+use libfinal::image::{pcolor_to_tupla, PImage};
 
 // Ancho y alto de la pantalla
 pub const ANCHO: u32 = 200;

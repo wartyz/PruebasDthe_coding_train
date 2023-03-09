@@ -7,5 +7,6 @@ members = [
     "capitulos/002_Menger_Sponge_Fractal",
     "capitulos/007_Solar_System_in_Processing",
     "capitulos/010_Maze_Generator",
-    "capitulos/013_Reaction_Diffusion_Algorithm"
+    "capitulos/013_Reaction_Diffusion_Algorithm",
+    "capitulos/014_FractalTree"
 ]
