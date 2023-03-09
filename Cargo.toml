@@ -1,9 +1,11 @@
 [workspace]
 members = [
     "libfinal",
+    "capitulos/000_Test",
     "capitulos/000_Comodin",
     "capitulos/001_Starfield",
     "capitulos/002_Menger_Sponge_Fractal",
     "capitulos/007_Solar_System_in_Processing",
-    "capitulos/010_Maze_Generator"
+    "capitulos/010_Maze_Generator",
+    "capitulos/013_Reaction_Diffusion_Algorithm"
 ]

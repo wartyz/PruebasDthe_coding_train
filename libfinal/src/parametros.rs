@@ -191,7 +191,7 @@ pub struct Parametros {
 
     // Para loadpixels()
     //pub pixels: Vec<Color>,
-    pub pixels: Vec<u8>,
+    pub pixels: Vec<PColor>,
 
     // Para angulos
     pub angulo_mode: ModosAngulo,

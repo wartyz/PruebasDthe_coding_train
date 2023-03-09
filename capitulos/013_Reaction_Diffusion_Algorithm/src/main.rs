@@ -4,6 +4,8 @@ use sketch::Sketch;
 
 pub mod sketch;
 
+use libfinal::test;
+
 fn main() {
     println!("directorio actual = {:?}", current_dir());
 
@@ -12,7 +14,7 @@ fn main() {
 
     let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
 
-    game.setup();
+    game.setup(&mut canvas);
 
     // Bucle principal ***********************************************************************
     'main_loop: loop {

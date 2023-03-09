@@ -7,6 +7,8 @@ use sdl2::Sdl;
 use crate::parametros::*;
 use crate::transform::identity3x3;
 
+use test;
+
 pub struct Engine {
     pub sdl_context: Option<Sdl>,
     pub param: Parametros,

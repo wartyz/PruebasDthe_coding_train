@@ -4,6 +4,8 @@ use sketch::Sketch;
 
 pub mod sketch;
 
+pub mod test;
+
 fn main() {
     println!("directorio actual = {:?}", current_dir());
 

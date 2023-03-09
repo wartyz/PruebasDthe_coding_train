@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use std::env::current_dir;
 
     //use crate::{sketch, Sketch};

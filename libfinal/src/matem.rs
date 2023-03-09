@@ -115,7 +115,16 @@ pub fn abs() { unimplemented!(); }
 
 pub fn ceil() { unimplemented!(); }
 
-pub fn constrain() { unimplemented!(); }
+// constrain(n, low, high) Restringe un valor entre un valor mínimo y máximo.
+pub fn constrain(n: f32, low: f32, high: f32) -> f32 {
+    if n < low {
+        return low;
+    }
+    if n > high {
+        return high;
+    }
+    n
+}
 
 pub fn dist() { unimplemented!(); }
 
