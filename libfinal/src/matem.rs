@@ -233,6 +233,36 @@ pub fn random(p0: f32) -> f32 {
 
 // Funciones creadas por mi ********************************
 
+impl PVector3 {
+    // Normaliza este vector
+    pub fn normalize(&mut self) {
+        let a = self.x * self.x;
+        let b = self.y * self.y;
+        //let c = float64(v.Z * v.Z)
+
+        let longitud = (a + b).sqrt();
+
+        if longitud != 0.0 {
+            self.x /= longitud;
+            self.y /= longitud;
+            //v.Z /= longitud
+        }
+    }
+
+    // Multiplica este vector por un escalar
+    pub fn mult(&mut self, v: f32) {
+        self.x *= v;
+        self.y *= v;
+    }
+
+    // Suma a este otro vector
+    pub fn add(&mut self, b: &PVector3) {
+        self.x += b.x;
+        self.y += b.y;
+        self.w += b.w;
+    }
+}
+
 pub fn pvector2(x: f32, y: f32) -> PVector2 {
     PVector2 { x, y }
 }
@@ -265,3 +295,15 @@ pub fn random_usize(p0: usize) -> usize {
     let mut rng = rand::thread_rng();
     rng.gen_range(0, p0)
 }
+
+// Devuelve un PVector3 con valores aleatórios
+pub fn random2d() -> PVector3 {
+    let mut rng = rand::thread_rng();
+    let x: f32 = rng.gen_range(-1.0, 1.0);
+    let y: f32 = rng.gen_range(-1.0, 1.0);
+    //println!("En p5_vector random2d x= {:?}", x);
+    let mut v = pvector3(x, y, 0.0);
+    v.normalize();
+    v
+}
+

@@ -65,10 +65,11 @@ pub fn load_shape() { unimplemented!(); }
 
 // 2d Primitives *******************************
 
-pub fn arc(canvas: &mut Canvas<Window>, param: &mut Parametros, cx: i32, cy: i32, r: i32, start_a: f32, end_a: f32) {
+pub fn arc(canvas: &mut Canvas<Window>, param: &mut Parametros, cx: f32, cy: f32, r: f32, start_a: f32, end_a: f32) {
     let step = std::f32::consts::FRAC_PI_2 / 10.; // Tamaño del ángulo de cada línea recta
-    let mut prev_x = (cx as f32 + r as f32 * start_a.cos()) as i32;
-    let mut prev_y = (cy as f32 - r as f32 * start_a.sin()) as i32;
+
+    let mut prev_x = cx + r * start_a.cos();
+    let mut prev_y = cy - r * start_a.sin();
 
     // Creo un range para usar en f32
     let range = std::iter::successors(Some(start_a + step), move |&x| {
@@ -80,79 +81,22 @@ pub fn arc(canvas: &mut Canvas<Window>, param: &mut Parametros, cx: i32, cy: i32
     });
 
     for angle in range {
-        let x = (cx as f32 + r as f32 * angle.cos()) as i32;
-        let y = (cy as f32 - r as f32 * angle.sin()) as i32;
+        let x = cx + r * angle.cos();
+        let y = cy - r * angle.sin();
 
-        let st = sdl2::pixels::Color::RGBA(
-            param.stroke_color.r,
-            param.stroke_color.g,
-            param.stroke_color.b,
-            param.stroke_color.a,
-        );
-        canvas.thick_line(prev_x as i16, prev_y as i16, x as i16, y as i16, 4, st);
+        // let st = Color::RGBA(
+        //     param.stroke_color.r,
+        //     param.stroke_color.g,
+        //     param.stroke_color.b,
+        //     param.stroke_color.a,
+        // );
+        let st_color = param.get_stroke_color_rgba_sdl2();
+        let st = param.stroke_weight;
+        canvas.thick_line(prev_x as i16, prev_y as i16, x as i16, y as i16, st, st_color);
 
         prev_x = x;
         prev_y = y;
     }
-}
-
-// Draw a piece of a circle FUNCION PROVISIONAL
-pub fn arc_mal(
-    param: &mut Parametros,
-    canvas: &mut Canvas<Window>,
-    x_vieja: f32,
-    y_vieja: f32,
-    ancho: f32,
-    alto: f32,
-    start: f32, // angulo inicial
-    stop: f32,  // angulo final
-) {
-    let p = param.matriz_total * pvector3(x_vieja, y_vieja, 1.0); // punto w = 1
-
-
-
-
-    /*if param.fill_bool {
-        d.draw_circle_sector(
-            raylib::prelude::Vector2::new(p.x, p.y),
-            ancho, // OJO provisional, solo uso ancho
-            start,
-            stop,
-            100, // OJO provisional
-            param.stroke_color.to_color_raylib(),
-        );
-    }
-    if param.stroke_bool {
-        d.draw_circle_sector_lines(
-            raylib::prelude::Vector2::new(p.x, p.y),
-            ancho, // OJO provisional, solo uso ancho
-            start,
-            stop,
-            100, // OJO provisional
-            param.stroke_color.to_color_raylib(),
-        );
-
-        // Si hay ancho añade alternativamente fuera/dentro otro circulo
-        if param.stroke_weight > 1.0 {
-            let kk = param.stroke_weight as usize;
-            let mut signo = 1;
-            let mut nn: f32;
-            for i in 1..(kk + 1) {
-                nn = (((i + 1) / 2) as i32 * signo) as f32;
-                let radioa = (ancho / 2.0) + nn;
-                let _radiob = (alto / 2.0) + nn;
-                signo = signo * -1;
-                d.draw_circle_sector_lines(
-                    raylib::prelude::Vector2::new(p.x, p.y),
-                    radioa,
-                    start,
-                    stop,
-                    100, // OJO provisional
-                    param.stroke_color.to_color_raylib(),
-                );
-            }
-        }
-    }*/
 }
 
 pub fn circle(canvas: &mut Canvas<Window>,
@@ -173,32 +117,29 @@ pub fn ellipse(
     radio_alto: f32,
 ) {
     // Para la escala aplicamos matriz escala a los radios
-    //println!("en shapes:ellipse antes ancho = {:#?} alto = {:#?}", ancho, alto);
-    //let r = product_matrix_v3(&param.matriz_escala, &Vector2::new(ancho / 2.0, alto / 2.0));
-    //println!("en shapes:ellipse despues  r = {:#?}", r);
-
-    //transform(param); // Carga la matriz resultado de todas las matrices en param.matriz_total
-
-    //println!("en shapes:ellipse matriz_total = {:#?}", param.matriz_total);
-
     let p = param.matriz_total * pvector3(x_vieja, y_vieja, 1.0); // Es punto w = 1
 
-    let st = sdl2::pixels::Color::RGBA(
-        param.stroke_color.r,
-        param.stroke_color.g,
-        param.stroke_color.b,
-        param.stroke_color.a,
-    );
+    // Color de Stroke si se necesita
+    // let st = Color::RGBA(
+    //     param.stroke_color.r,
+    //     param.stroke_color.g,
+    //     param.stroke_color.b,
+    //     param.stroke_color.a,
+    // );
 
-    let fi = sdl2::pixels::Color::RGBA(
+    let st_color = param.get_stroke_color_rgba_sdl2();
+
+    // Color de relleno si se necesita
+    /*let fi = Color::RGBA(
         param.fill_color.r,
         param.fill_color.g,
         param.fill_color.b,
         param.fill_color.a,
-    );
+    );*/
 
+    let fi_color = param.get_fill_color_rgba_sdl2();
     let error = 0.01f32; // Para comparaciones de f32
-    if (param.stroke_weight - 1.0).abs() < error {
+    if (param.stroke_weight as f32 - 1.0).abs() < error {
         // Valor por defecto
         if param.fill_bool {
             let _ = canvas.filled_ellipse(
@@ -206,7 +147,7 @@ pub fn ellipse(
                 p.y as i16,
                 radio_ancho as i16,
                 radio_alto as i16,
-                fi,
+                fi_color,
             );
         }
         if param.stroke_bool {
@@ -215,15 +156,15 @@ pub fn ellipse(
                 p.y as i16,
                 radio_ancho as i16,
                 radio_alto as i16,
-                st,
+                st_color,
             );
         }
     } else {
         //# If the penwidth is larger than 1, things become a bit more complex.
-        let inner_r1 = radio_ancho - param.stroke_weight * 0.5;
-        let inner_r2 = radio_alto - param.stroke_weight * 0.5;
+        let inner_r1 = radio_ancho - param.stroke_weight as f32 * 0.5;
+        let inner_r2 = radio_alto - param.stroke_weight as f32 * 0.5;
 
-        let num_pasos = (2.0 * param.stroke_weight) as usize;
+        let num_pasos = (2.0 * param.stroke_weight as f32) as usize;
         for n in 0..num_pasos {
             if param.fill_bool {
                 let _ = canvas.filled_ellipse(
@@ -231,7 +172,7 @@ pub fn ellipse(
                     p.y as i16,
                     (inner_r1 + n as f32 * 0.5) as i16,
                     (inner_r2 + n as f32 * 0.5) as i16,
-                    fi,
+                    fi_color,
                 );
             }
             if param.stroke_bool {
@@ -240,7 +181,7 @@ pub fn ellipse(
                     p.y as i16,
                     (inner_r1 + n as f32 * 0.5) as i16,
                     (inner_r2 + n as f32 * 0.5) as i16,
-                    st,
+                    st_color,
                 );
             }
         }
@@ -259,12 +200,14 @@ pub fn line(
     let p0 = param.matriz_total * pvector3(x0_vieja, y0_vieja, 1.0); // punto w = 1
     let p1 = param.matriz_total * pvector3(x1_vieja, y1_vieja, 1.0);
 
-    let st = sdl2::pixels::Color::RGBA(
-        param.stroke_color.r,
-        param.stroke_color.g,
-        param.stroke_color.b,
-        param.stroke_color.a,
-    );
+    // let st = Color::RGBA(
+    //     param.stroke_color.r,
+    //     param.stroke_color.g,
+    //     param.stroke_color.b,
+    //     param.stroke_color.a,
+    // );
+
+    let st_color = param.get_stroke_color_rgba_sdl2();
 
     let _ = canvas.thick_line(
         p0.x as i16,
@@ -272,23 +215,25 @@ pub fn line(
         p1.x as i16,
         p1.y as i16,
         param.stroke_weight as u8,
-        st,
+        st_color,
     );
 }
 
 pub fn point(canvas: &mut Canvas<Window>, param: &Parametros, x: f32, y: f32) {
-    let c = sdl2::pixels::Color::RGBA(
-        param.stroke_color.r,
-        param.stroke_color.g,
-        param.stroke_color.b,
-        param.stroke_color.a,
-    );
+    // let c = Color::RGBA(
+    //     param.stroke_color.r,
+    //     param.stroke_color.g,
+    //     param.stroke_color.b,
+    //     param.stroke_color.a,
+    // );
+
+    let st_color = param.get_stroke_color_rgba_sdl2();
     let error = 0.01f32; // Para comparaciones de f32
 
-    if (param.stroke_weight - 1.0).abs() < error {
-        let _ = canvas.pixel(x as i16, y as i16, c);
+    if (param.stroke_weight as f32 - 1.).abs() < error {
+        let _ = canvas.pixel(x as i16, y as i16, st_color);
     } else {
-        let _ = canvas.filled_circle(x as i16, y as i16, (param.stroke_weight / 2.0) as i16, c);
+        let _ = canvas.filled_circle(x as i16, y as i16, (param.stroke_weight as f32 / 2.0) as i16, st_color);
     }
 }
 
@@ -339,25 +284,27 @@ pub fn rect(
 
     let p = param.matriz_total * pvector3(x_vieja, y_vieja, 0.0);
 
-    let st = sdl2::pixels::Color::RGBA(
-        param.stroke_color.r,
-        param.stroke_color.g,
-        param.stroke_color.b,
-        param.stroke_color.a,
-    );
+    // let st = Color::RGBA(
+    //     param.stroke_color.r,
+    //     param.stroke_color.g,
+    //     param.stroke_color.b,
+    //     param.stroke_color.a,
+    // );
+    let st_color = param.get_stroke_color_rgba_sdl2();
+    // let fi = Color::RGBA(
+    //     param.fill_color.r,
+    //     param.fill_color.g,
+    //     param.fill_color.b,
+    //     param.fill_color.a,
+    // );
 
-    let fi = sdl2::pixels::Color::RGBA(
-        param.fill_color.r,
-        param.fill_color.g,
-        param.fill_color.b,
-        param.fill_color.a,
-    );
+    let fi_color = param.get_fill_color_rgba_sdl2();
 
     let error = 0.01f32; // Para comparaciones de f32
-    if (param.stroke_weight - 1.0).abs() < error {
+    if (param.stroke_weight as f32 - 1.0).abs() < error {
         // Valor por defecto
         if param.fill_bool {
-            canvas.set_draw_color(fi);
+            canvas.set_draw_color(fi_color);
             let _ = canvas.fill_rect(sdl2::rect::Rect::new(
                 p.x as i32,
                 p.y as i32,
@@ -372,15 +319,15 @@ pub fn rect(
                 p.y as i16,
                 p.x as i16 + ancho as i16,
                 p.y as i16 + alto as i16,
-                st,
+                st_color,
             );
         }
     } else {
         //# If the penwidth is larger than 1, things become a bit more complex.
-        let inner_r1 = ancho - param.stroke_weight * 0.5;
-        let inner_r2 = alto - param.stroke_weight * 0.5;
+        let inner_r1 = ancho - param.stroke_weight as f32 * 0.5;
+        let inner_r2 = alto - param.stroke_weight as f32 * 0.5;
 
-        let num_pasos = (2.0 * param.stroke_weight) as usize;
+        let num_pasos = (2.0 * param.stroke_weight as f32) as usize;
         for n in 0..num_pasos {
             if param.fill_bool {
                 let _ = canvas.filled_ellipse(
@@ -388,7 +335,7 @@ pub fn rect(
                     p.y as i16,
                     (inner_r1 + n as f32 * 0.5) as i16,
                     (inner_r2 + n as f32 * 0.5) as i16,
-                    fi,
+                    fi_color,
                 );
             }
             if param.stroke_bool {
@@ -397,7 +344,7 @@ pub fn rect(
                     p.y as i16,
                     (inner_r1 + n as f32 * 0.5) as i16,
                     (inner_r2 + n as f32 * 0.5) as i16,
-                    st,
+                    st_color,
                 );
             }
         }
@@ -470,7 +417,10 @@ pub fn stroke_cap() { unimplemented!(); }
 
 pub fn stroke_join() { unimplemented!(); }
 
-pub fn stroke_weight() { unimplemented!(); }
+// Indica la anchura de las lineas en pixels
+pub fn stroke_weight(sw: u8, param: &mut Parametros) {
+    param.stroke_weight = sw;
+}
 
 // Loading & Display ***********************************
 pub fn shape_mode() { unimplemented!(); }

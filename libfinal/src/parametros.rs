@@ -1,4 +1,5 @@
-use crate::color::{color4, PColor};
+use sdl2::pixels::Color;
+use crate::color::{pcolor4, PColor};
 use crate::matem::{PVector2, pvector2};
 use crate::shape::{identity4x4, Matrix4x4};
 use crate::transform::{identity3x3, Matrix3x3};
@@ -170,7 +171,7 @@ pub struct Parametros {
     pub color_background: PColor,
 
     pub stroke_bool: bool,
-    pub stroke_weight: f32,
+    pub stroke_weight: u8,
     pub stroke_color: PColor,
     pub colormode: ColorMode,
 
@@ -241,11 +242,11 @@ impl Parametros {
             matriz_stack3d: vec![],
 
             fill_bool: true,
-            fill_color: color4(255, 255, 255, 255),
-            color_background: color4(255, 255, 255, 255),
+            fill_color: pcolor4(255, 255, 255, 255),
+            color_background: pcolor4(255, 255, 255, 255),
             stroke_bool: true,
-            stroke_weight: 1.0,
-            stroke_color: color4(0, 0, 0, 255),
+            stroke_weight: 1,
+            stroke_color: pcolor4(0, 0, 0, 255),
             //coord_cursor: Vector3::new(0.0, 0.0, 0.0),
             colormode: ColorMode::RGB,
             //vertex: vec![],
@@ -268,5 +269,23 @@ impl Parametros {
             framecount: 0,
             full_screen: false,
         }
+    }
+
+    pub fn get_stroke_color_rgba_sdl2(&self) -> Color {
+        Color::RGBA(
+            self.stroke_color.r,
+            self.stroke_color.g,
+            self.stroke_color.b,
+            self.stroke_color.a,
+        )
+    }
+
+    pub fn get_fill_color_rgba_sdl2(&self) -> Color {
+        Color::RGBA(
+            self.fill_color.r,
+            self.fill_color.g,
+            self.fill_color.b,
+            self.fill_color.a,
+        )
     }
 }

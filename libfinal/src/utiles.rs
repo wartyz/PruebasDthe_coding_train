@@ -1,6 +1,6 @@
 // Prueba de https://github.com/pixlark/ColorPicker/blob/master/main.c
 
-use crate::color::{color4, PColor};
+use crate::color::{pcolor4, PColor};
 use crate::matem::mapa;
 
 // Vienen valore       0-360    0-100   0-100
@@ -22,7 +22,7 @@ pub fn aux_hsv_to_rgb2(inh: f32, ins: f32, inb: f32, ina: f32) -> PColor {
     let t;
     let ff;
     let i;
-    let mut out = color4(0, 0, 0, 0);
+    let mut out = pcolor4(0, 0, 0, 0);
 
     if ins <= 0.0 {
         // < is bogus, just shuts up warnings
