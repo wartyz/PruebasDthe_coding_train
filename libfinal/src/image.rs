@@ -87,6 +87,7 @@ use sdl2::surface::Surface;
 use sdl2::video::Window;
 use std::error::Error;
 use std::path::Path;
+use sdl2::pixels::PixelFormatEnum;
 /* **********************  Image   ****************************************************/
 #[derive(Debug, Clone, Default)]
 pub struct PImage {
@@ -132,23 +133,15 @@ impl PImage {
     // Los cambios posteriores en la ventana de visualización no se reflejarán en píxeles
     // hasta que se vuelva a llamar a loadPixels().
     pub fn load_pixels(&mut self, canvas: &mut Canvas<Window>) {
-        //}  {
-        //dbg!(self.image[100][200]);
         let anch = canvas.viewport().width() as u32;
         let alt = canvas.viewport().height() as u32;
 
-        //dbg!(anch);
-        //dbg!(alt);
         self.image_width = anch;
         self.image_height = alt;
 
         let texture_creator = canvas.texture_creator();
 
-        //dbg!(canvas.viewport().width());
         let format = ARGB8888;
-        // let mut texture = texture_creator
-        //     .create_texture_target(texture_creator.default_pixel_format(), anch, alt)
-        //     .unwrap();
 
         let mut texture = texture_creator
             .create_texture_target(format, anch, alt)
@@ -169,36 +162,21 @@ impl PImage {
 
         // Leer los píxeles de la textura en el buffer en orden mal.......
         let bytes = canvas.read_pixels(None, format).unwrap();
-        // for i in 0..10 {
-        //     dbg!(bytes[i]);
-        // }
-
-        // Rellenamos la imagen en Self
-        /*self.image = bytes
-            .chunks(4) // crea de [1,2,3,4,5,6..] a [1,2,3,4],[5,6,7,8]...
-            .map(|chunk| {
-                let r = chunk[0];
-                let g = chunk[1];
-                let b = chunk[2];
-                let a = chunk[3];
-                (r, g, b, a)
-            })
-            .collect::<Vec<(u8, u8, u8, u8)>>()
-            .chunks(alt as usize) // al es altura de la imagen
-            .map(|row| row.to_vec())
-            .collect();*/
 
         let kk: Vec<Vec<(u8, u8, u8, u8)>> = bytes
             .chunks(4) // crea de [1,2,3,4,5,6..] a [1,2,3,4],[5,6,7,8]...
+            // Crea una tupla de cada pequeño arreglo
             .map(|chunk| {
-                let r = chunk[0];
+                let b = chunk[0];
                 let g = chunk[1];
-                let b = chunk[2];
+                let r = chunk[2];
                 let a = chunk[3];
-                (r, g, b, a)
+                (b, g, r, a)
             })
             .collect::<Vec<(u8, u8, u8, u8)>>()
-            .chunks(anch as usize) // alt es altura de la imagen
+            // anch es la anchura de la imagen, crea arreglos  de tamaño anchura
+            .chunks(anch as usize)
+            // convierte cada arreglo a vector
             .map(|row| row.to_vec())
             .collect();
 
@@ -206,18 +184,6 @@ impl PImage {
         self.image = (0..kk[0].len())
             .map(|col_index| kk.iter().map(|row| row[col_index]).collect())
             .collect();
-
-        // dbg!(&kk[0][0]);
-        // dbg!(&kk[1][0]);
-        // dbg!(&kk[0][1]);
-        // dbg!(&transposed_matrix[0][0]);
-        // dbg!(&transposed_matrix[1][0]);
-        // dbg!(&transposed_matrix[0][1]);
-
-        //dbg!(&kk[1]);
-
-        // dbg!(self.image.len());
-        // dbg!(self.image[0].len());
     }
 
     pub fn mask() {
@@ -247,6 +213,7 @@ impl PImage {
         //dbg!(self.image_height); // alto
 
         let format = ARGB8888;
+        //let format = BGRA8888; // prueba cambiando el formato
         let mut texture: Texture = texture_creator
             .create_texture_streaming(format, self.image_width, self.image_height)
             .unwrap();
@@ -309,7 +276,7 @@ impl PImage {
     }
 
     // Carga una imagen en una variable de tipo PImage.
-    // Solo carga .bmp   debe ser de formato ARGB8888
+    // Solo carga .bmp   debe ser de formato ARGB8888 osea 32 bits
     pub fn load_image(
         canvas: &mut Canvas<Window>,
         filename: &str,
@@ -321,16 +288,14 @@ impl PImage {
         let texture = texture_creator.load_texture(path).unwrap();
         let format = texture.query().format;
         dbg!(format); // ARGB8888
+
         let image_width = texture.query().width;
         let image_height = texture.query().height;
 
-        //dbg!(image_width);
-        //dbg!(image_height);
-
         let surface = Surface::load_bmp(filename).unwrap();
-        //dbg!(surface.pixel_format_enum());
+
         let pixels = surface.without_lock().unwrap();
-        //dbg!(pixels.len());
+
         println!("Path {:?}", Path::new(filename));
         println!(
             "width, height, pitch, size ({:?}, {:?}, {:?}, {:?})",
@@ -339,15 +304,8 @@ impl PImage {
             surface.pitch(),
             surface.size()
         );
-        println!("raw_pixel_data u8 length {:?}", pixels.len());
 
-        //let bpp = pixels.len() as u32 / (surface.height() * surface.pitch());
-        //println!("bytes per pixel: {:?}", bpp);
-
-        // Creamos un vector para contener los datos de la imagen.
-        // let mut image: Vec<Vec<(u8, u8, u8, u8)>> =
-        //     vec![vec![(0, 0, 0, 0); image_width as usize]; image_height as usize];
-
+        // Creamos un vector para contener los datos de la imagen
         let mut image: Vec<Vec<(u8, u8, u8, u8)>> = vec![];
         /* for y in 0..image_height as usize {
         let mut vv = vec![];
@@ -372,10 +330,6 @@ impl PImage {
             image.push(vv);
         }
 
-        //dbg!(image_width);
-        //dbg!(image_height);
-        //dbg!(pixels.len());
-        //dbg!(image[100][200]);
         Ok(PImage {
             image,
             image_width,

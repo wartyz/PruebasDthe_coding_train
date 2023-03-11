@@ -2,8 +2,8 @@ use libfinal::engine::{Canvas, Engine, Window};
 use libfinal::environment::full_screen;
 
 // Ancho y alto de la pantalla
-pub const ANCHO: u32 = 500;
-pub const ALTO: u32 = 482;
+pub const ANCHO: u32 = 600;
+pub const ALTO: u32 = 400;
 
 // Aqui vendrá el pseudocódigo javascript
 pub struct Sketch {
