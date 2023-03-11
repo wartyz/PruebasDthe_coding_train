@@ -134,21 +134,20 @@ pub fn dist4(x0: f32, y0: f32, x1: f32, y1: f32) -> f32 {
     ((x * x) + (y * y)).sqrt()
 }
 
-// Distancia entre dos vectores  d = ((x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2)1/2
-pub fn dist_s(a: &PVector4, b: &PVector4) -> f32 {
-    let x = a.x - b.x;
-    let y = a.y - b.y;
-    let z = a.z - b.z;
-    ((x * x) + (y * y) + (z * z)).sqrt()
-}
-
 pub fn exp() { unimplemented!(); }
 
 pub fn floor(v: f32) -> f32 {
     v.floor()
 }
 
-pub fn lerp() { unimplemented!(); }
+// Interpolación lineal https://en.wikipedia.org/wiki/Linear_interpolation
+pub fn lerp(start: f32, stop: f32, amt: f32) -> f32 {
+    //if amt > 1.0 || amt < 0.0 {
+    if !(0.0..=1.0).contains(&amt) {
+        panic!("Error en matem::lerp");
+    }
+    (1.0 - amt) * start + amt * stop
+}
 
 pub fn log() { unimplemented!(); }
 
@@ -261,6 +260,42 @@ impl PVector3 {
         self.y += b.y;
         self.w += b.w;
     }
+
+    // Divide este vector por un numero
+    pub fn div(&mut self, b: f32) {
+        self.x /= b;
+        self.y /= b;
+    }
+
+    // Limita la magnitud máxima del vector
+    pub fn limit(&mut self, max: f32) {
+        let magnitud_actual = (self.x * self.x + self.y * self.y).sqrt();
+        if magnitud_actual > max {
+            self.set_mag(max);
+        }
+    }
+
+    // Devuelve la magnitud de este vector
+    pub fn mag(&mut self) -> f32 {
+        (self.x * self.x + self.y * self.y).sqrt()
+    }
+
+    // Devuelve la magnitud cuadrada de este vector
+    pub fn mag_sq(&mut self) -> f32 {
+        self.x * self.x + self.y * self.y
+    }
+
+    // Establece la magnitud de este vector
+    pub fn set_mag(&mut self, magnitud: f32) {
+        self.normalize();
+        self.x *= magnitud;
+        self.y *= magnitud;
+    }
+
+    pub fn lerp(&mut self, vector: PVector3, amt: f32) {
+        self.x = (1.0 - amt) * self.x + amt * vector.x;
+        self.y = (1.0 - amt) * self.y + amt * vector.y;
+    }
 }
 
 pub fn pvector2(x: f32, y: f32) -> PVector2 {
@@ -273,6 +308,24 @@ pub fn pvector3(x: f32, y: f32, w: f32) -> PVector3 {
 
 pub fn pvector4(x: f32, y: f32, z: f32, w: f32) -> PVector4 {
     PVector4 { x, y, z, w }
+}
+
+// Distancia entre dos pvectores3
+pub fn dist_s3(a: &PVector3, b: &PVector3) -> f32 {
+    //let pa = Point2::new(a.x, a.y);
+    //let pb = Point2::new(b.x, b.y);
+
+    let x = a.x - b.x;
+    let y = a.y - b.y;
+    ((x * x) + (y * y)).sqrt()
+}
+
+// Distancia entre dos pvectores4  d = ((x2 - x1)2 + (y2 - y1)2 + (z2 - z1)2)1/2
+pub fn dist_s4(a: &PVector4, b: &PVector4) -> f32 {
+    let x = a.x - b.x;
+    let y = a.y - b.y;
+    let z = a.z - b.z;
+    ((x * x) + (y * y) + (z * z)).sqrt()
 }
 
 pub fn random_range(p0: f32, p1: f32) -> f32 {

@@ -10,5 +10,6 @@ members = [
     "capitulos/013_Reaction_Diffusion_Algorithm",
     "capitulos/014_FractalTree",
     "capitulos/028_Metaballs",
-    "capitulos/030_Phyllotaxis"
+    "capitulos/030_Phyllotaxis",
+    "capitulos/032_1_Agar_io_Part_1"
 ]
