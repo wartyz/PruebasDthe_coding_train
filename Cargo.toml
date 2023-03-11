@@ -14,5 +14,6 @@ members = [
     "capitulos/032_1_Agar_io_Part_1",
     "capitulos/033_Poisson_disc",
     "capitulos/034_Diffusion_Limited_Aggregation",
-    "capitulos/050_1b_Animated_Circle_Packing_Part_1"
+    "capitulos/050_1b_Animated_Circle_Packing_Part_1",
+    "capitulos/061_Fractal_Spirograph"
 ]

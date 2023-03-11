@@ -54,6 +54,7 @@ Random
     randomSeed()
     random()
  */
+use std::f32::consts::PI;
 use rand::Rng;
 
 // Math *******************************
@@ -191,7 +192,10 @@ pub fn cos() { unimplemented!(); }
 
 pub fn degrees() { unimplemented!(); }
 
-pub fn radians() { unimplemented!(); }
+// grados a radianes
+pub fn radians(angulo: f32) -> f32 {
+    (angulo * PI as f32) / 180.0
+}
 
 pub fn sin() { unimplemented!(); }
 

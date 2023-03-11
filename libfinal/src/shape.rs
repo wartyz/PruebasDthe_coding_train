@@ -52,7 +52,7 @@ use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use crate::parametros::{Parametros, RectMode};
+use crate::parametros::{ModosBeginShape, Parametros, RectMode};
 use crate::matem::*;
 use crate::transform::{identity3x3, Matrix3x3};
 
@@ -367,7 +367,7 @@ pub fn triangle() { unimplemented!(); }
 // Vertex ***********************************
 pub fn begin_contour() { unimplemented!(); }
 
-pub fn begin_shape() { unimplemented!(); }
+pub fn begin_shape(_shape: ModosBeginShape) {}
 
 pub fn bezier_vertex() { unimplemented!(); }
 
@@ -375,11 +375,32 @@ pub fn curve_vertex() { unimplemented!(); }
 
 pub fn end_contour() { unimplemented!(); }
 
-pub fn end_shape() { unimplemented!(); }
+pub fn end_shape(canvas: &mut Canvas<Window>, param: &mut Parametros, modo_close: ModosBeginShape) {
+    let mut vx = Vec::new();
+    let mut vy = Vec::new();
+
+    for v in &param.vertex {
+        let p = param.matriz_total * pvector3(v.x, v.y, 0.0);
+        vx.push(p.x as i16);
+        vy.push(p.y as i16);
+    }
+    let st = Color::RGBA(
+        param.stroke_color.r,
+        param.stroke_color.g,
+        param.stroke_color.b,
+        param.stroke_color.a,
+    );
+
+    let _ = canvas.aa_polygon(&vx, &vy, st);
+}
 
 pub fn quadratic_vertex() { unimplemented!(); }
 
-pub fn vertex() { unimplemented!(); }
+pub fn vertex(x_vieja: f32, y_vieja: f32, param: &mut Parametros) {
+    let p0 = param.matriz_total * pvector3(x_vieja, y_vieja, 1.0); // w = 1 es punto
+
+    param.vertex.push(pvector2(p0.x, p0.y));
+}
 
 // Curves ***************************************
 pub fn bezier_detail() { unimplemented!(); }

@@ -32,7 +32,7 @@ impl Engine {
 
     pub fn update(&mut self) -> bool {
         self.reinicia_matrices();
-        //self.reinicia_vertex();
+        self.reinicia_vertex();
         self.reinicia_teclado();
         self.reinicia_raton();
         // Crea contexto SDL2
@@ -130,6 +130,11 @@ impl Engine {
         pub fn reinicia_vertex(&mut self) {
             self.param.vertex.clear();
         }*/
+
+    // Aqui se reinicia en arreglo vertex: Vec<PVector2> para shapes
+    pub fn reinicia_vertex(&mut self) {
+        self.param.vertex.clear();
+    }
 
     // Aqui se reinicia en el indicador de tecla presionad
     pub fn reinicia_teclado(&mut self) {

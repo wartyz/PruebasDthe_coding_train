@@ -176,9 +176,9 @@ pub struct Parametros {
     pub colormode: ColorMode,
 
     // Para shapes no implementa copy lo quito provisionalmente
-    //pub vertex: Vec<Vector2>,
+    pub vertex: Vec<PVector2>,
     // Para BeginShape() Vertex() y EndShape() --
-    //pub vectores: Vec<Vector2>,
+    //pub vectores: Vec<PVector2>,
     pub rect_mode: RectMode,
 
     // Para tecladp
@@ -249,7 +249,7 @@ impl Parametros {
             stroke_color: pcolor4(0, 0, 0, 255),
             //coord_cursor: Vector3::new(0.0, 0.0, 0.0),
             colormode: ColorMode::RGB,
-            //vertex: vec![],
+            vertex: vec![],
             //vectores: vec![],
             rect_mode: RectMode::Corner,
             key: CodigosTecla::NadaTecla,
