@@ -74,7 +74,7 @@ impl Default for PVector2 {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct PVector3 {
     pub x: f32,
     pub y: f32,

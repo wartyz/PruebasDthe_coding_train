@@ -12,5 +12,6 @@ members = [
     "capitulos/028_Metaballs",
     "capitulos/030_Phyllotaxis",
     "capitulos/032_1_Agar_io_Part_1",
-    "capitulos/033_Poisson_disc"
+    "capitulos/033_Poisson_disc",
+    "capitulos/034_Diffusion_Limited_Aggregation"
 ]
