@@ -28,7 +28,7 @@ impl Walker {
             hu: 0.0,
         }
     }
-    pub fn new3(engine: &mut Engine, x: f32, y: f32, radius: f32) -> Walker {
+    pub fn new3(x: f32, y: f32, radius: f32) -> Walker {
         Walker {
             pos: pvector3(x, y, 1.0),
             stuck: true,
@@ -36,7 +36,7 @@ impl Walker {
             hu: 0.0,
         }
     }
-    pub fn new4(engine: &mut Engine, x: f32, y: f32, stuck: bool, radius: f32) -> Walker {
+    pub fn new4(x: f32, y: f32, stuck: bool) -> Walker {
         Walker {
             pos: pvector3(x, y, 1.0),
             stuck,

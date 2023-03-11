@@ -49,7 +49,11 @@ pub fn alpha() { unimplemented!(); }
 
 pub fn blue() { unimplemented!(); }
 
-pub fn brightness() { unimplemented!(); }
+// Extrae el valor de brillo HSB de un objeto Color.
+// Luminance (standard for certain colour spaces): (0.2126*R + 0.7152*G + 0.0722*B)
+pub fn brightness(color: PColor) -> f32 {
+    color.r as f32 * 0.2126 + color.g as f32 * 0.7152 + color.b as f32 * 0.0722
+}
 
 pub fn pcolor1(n: u8) -> PColor {
     PColor::new3(n, n, n)
@@ -153,5 +157,11 @@ pub fn stroke3(r: f32, g: f32, b: f32, param: &mut Parametros) {
         ColorMode::HSB => aux_hsv_to_rgb2(r, g, b, 255.0),
         _ => panic!("Error"),
     };
+}
+
+// *************************************************************
+// Funciones creadas por mi **********************************
+pub fn color4(r: u8, g: u8, b: u8, a: u8) -> PColor {
+    PColor { r, g, b, a }
 }
 

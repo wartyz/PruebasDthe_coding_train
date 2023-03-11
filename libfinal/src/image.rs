@@ -280,7 +280,7 @@ impl PImage {
     pub fn load_image(
         canvas: &mut Canvas<Window>,
         filename: &str,
-    ) -> Result<PImage, Box<dyn Error>> {
+    ) -> Option<PImage> {
         let texture_creator = canvas.texture_creator();
         let path = Path::new(filename);
         dbg!(path);
@@ -330,7 +330,7 @@ impl PImage {
             image.push(vv);
         }
 
-        Ok(PImage {
+        Some(PImage {
             image,
             image_width,
             image_height,

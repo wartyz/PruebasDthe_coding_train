@@ -63,7 +63,6 @@ impl Sketch {
         let h = self.engine.param.alto;
 
         self.tree.push(Walker::new3(
-            &mut self.engine,
             w / 2.0,
             h / 2.0,
             self.radius,
