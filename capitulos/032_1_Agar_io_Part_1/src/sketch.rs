@@ -47,7 +47,7 @@ impl Sketch {
         let w = self.engine.param.ancho;
         let h = self.engine.param.alto;
         self.blob = Some(Blob::new(&mut self.engine, 0.0, 0.0, 64.0));
-        for i in 0..200 {
+        for _ in 0..200 {
             let x = random_range(-w, w);
             let y = random_range(-h, h);
             self.blobs.push(Blob::new(&mut self.engine, x, y, 16.0));

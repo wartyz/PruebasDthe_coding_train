@@ -230,7 +230,7 @@ pub fn random(p0: f32) -> f32 {
     rng.gen_range(0.0, p0)
 }
 
-// Funciones creadas por mi ********************************
+// Funciones creadas por mi ******** algunas estaban en la librería P5 ************************
 
 impl PVector3 {
     // Normaliza este vector
@@ -308,6 +308,16 @@ pub fn pvector3(x: f32, y: f32, w: f32) -> PVector3 {
 
 pub fn pvector4(x: f32, y: f32, z: f32, w: f32) -> PVector4 {
     PVector4 { x, y, z, w }
+}
+
+// Distancia entre dos pvectores
+pub fn dist_s(a: &PVector3, b: &PVector3) -> f32 {
+    //let pa = Point2::new(a.x, a.y);
+    //let pb = Point2::new(b.x, b.y);
+
+    let x = a.x - b.x;
+    let y = a.y - b.y;
+    ((x * x) + (y * y)).sqrt()
 }
 
 // Distancia entre dos pvectores3

@@ -11,5 +11,6 @@ members = [
     "capitulos/014_FractalTree",
     "capitulos/028_Metaballs",
     "capitulos/030_Phyllotaxis",
-    "capitulos/032_1_Agar_io_Part_1"
+    "capitulos/032_1_Agar_io_Part_1",
+    "capitulos/033_Poisson_disc"
 ]
