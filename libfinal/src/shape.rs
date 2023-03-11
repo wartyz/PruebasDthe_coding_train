@@ -432,7 +432,9 @@ pub fn sphere() { unimplemented!(); }
 // Attributes *****************************************
 pub fn ellipse_mode() { unimplemented!(); }
 
-pub fn rect_mode() { unimplemented!(); }
+pub fn rect_mode(mode: RectMode, param: &mut Parametros) {
+    param.rect_mode = mode;
+}
 
 pub fn stroke_cap() { unimplemented!(); }
 

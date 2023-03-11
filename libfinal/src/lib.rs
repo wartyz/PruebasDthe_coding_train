@@ -16,8 +16,9 @@ pub mod shape;
 // pub mod test;
 pub mod transform;
 //pub mod transform3d;
-// pub mod typography;
+pub mod typography;
 pub mod utiles;
+
 
 
 

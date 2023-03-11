@@ -29,7 +29,7 @@ impl Sketch {
         }
     }
     pub fn pre_load(&mut self) {
-        full_screen(&mut self.engine);
+        //full_screen(&mut self.engine);
     }
     // Función setup() de javascript
     pub fn setup(&mut self) {}

@@ -111,15 +111,6 @@ pub fn fill3(r: f32, g: f32, b: f32, param: &mut Parametros) {
         ColorMode::HSB => aux_hsv_to_rgb2(r, g, b, 255.0),
         _ => panic!("Error"),
     };
-
-    //    let mut col;
-    //    if param.colormode == ColorMode::RGB {
-    //        col = Color::new(r as u8, g as u8, b as u8, 255);
-    //    }
-    //    if param.colormode == ColorMode::HSB {
-    //
-    //    }
-    //param.fill_color = col;
 }
 
 pub fn fill4(r: f32, g: f32, b: f32, a: f32, param: &mut Parametros) {
