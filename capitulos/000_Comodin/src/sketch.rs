@@ -9,7 +9,7 @@ pub const ALTO: u32 = 400;
 pub struct Sketch {
     pub engine: Engine,
 
-    // Variables globales del scketch
+    // Variables globales del sketch
 }
 
 impl Default for Sketch {
