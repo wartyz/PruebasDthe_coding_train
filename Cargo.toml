@@ -19,5 +19,6 @@ members = [
     "capitulos/064_1_Forward_Kinematics",
     "capitulos/067_Pong",
     "capitulos/069_1_Evolutionary_Steering_Behaviors",
-    "capitulos/078_Simple_Particle_System"
+    "capitulos/078_Simple_Particle_System",
+    "capitulos/081_1_Circle_Morphing_Part_1"
 ]

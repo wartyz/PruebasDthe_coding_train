@@ -57,6 +57,7 @@ Random
 use std::f32::consts::PI;
 use perlin_noise::PerlinNoise;
 use rand::Rng;
+use crate::parametros::{ModosAngulo, Parametros};
 
 // Math *******************************
 #[derive(Debug, Clone, Copy)]
@@ -362,6 +363,12 @@ pub fn sub_s(a: &PVector3, b: &PVector3) -> PVector3 {
     pvector3(a.x - b.x, a.y - b.y, 0.0)
 }
 
+pub fn vector3lerp(a: &PVector3, b: &PVector3, amt: f32) -> PVector3 {
+    let rx = (1. - amt) * a.x + amt * b.x;
+    let ry = (1. - amt) * a.y + amt * b.y;
+    pvector3(rx, ry, 0.)
+}
+
 pub fn random_range(p0: f32, p1: f32) -> f32 {
     let mut rng = rand::thread_rng();
 
@@ -392,6 +399,22 @@ pub fn random2d() -> PVector3 {
     let mut v = pvector3(x, y, 0.0);
     v.normalize();
     v
+}
+
+pub fn angle_mode(modo: ModosAngulo, param: &mut Parametros) {
+    param.angulo_mode = modo;
+}
+
+// Recibe grados devuelve coseno
+pub fn cos_gr(valor: f32) -> f32 {
+    let valor = valor.to_radians();
+    valor.cos()
+}
+
+// Recibe grados devuelve seno
+pub fn sin_gr(valor: f32) -> f32 {
+    let valor = valor.to_radians();
+    valor.sin()
 }
 
 // Noise ----------------------------------------------
