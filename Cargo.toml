@@ -17,5 +17,6 @@ members = [
     "capitulos/050_1b_Animated_Circle_Packing_Part_1",
     "capitulos/061_Fractal_Spirograph",
     "capitulos/064_1_Forward_Kinematics",
-    "capitulos/067_Pong"
+    "capitulos/067_Pong",
+    "capitulos/069_1_Evolutionary_Steering_Behaviors"
 ]

@@ -35,6 +35,7 @@ impl Engine {
         self.reinicia_vertex();
         self.reinicia_teclado();
         self.reinicia_raton();
+
         // Crea contexto SDL2
         let sdl_context = self.sdl_context.as_ref().unwrap();
         let mut event_pump = sdl_context.event_pump().unwrap();
@@ -73,6 +74,7 @@ impl Engine {
                     self.param.mouse_boton_mantiene = CodigosRaton::Izquierdo;
                 }
                 Event::MouseMotion { x, y, .. } => {
+                    println!("MouseMotion");
                     self.param.mouse_posicion.x = x as f32;
                     self.param.mouse_posicion.y = y as f32;
                 }
@@ -125,11 +127,6 @@ impl Engine {
     pub fn reinicia_matrices(&mut self) {
         self.param.matriz_total = identity3x3();
     }
-
-    /*    // Aqui se reinicia en arreglo vertex: Vec<Vector2> para shapes
-        pub fn reinicia_vertex(&mut self) {
-            self.param.vertex.clear();
-        }*/
 
     // Aqui se reinicia en arreglo vertex: Vec<PVector2> para shapes
     pub fn reinicia_vertex(&mut self) {

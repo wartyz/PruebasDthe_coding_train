@@ -23,6 +23,7 @@ use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use crate::engine::Engine;
+use crate::matem::{constrain, lerp};
 use crate::parametros::{ColorMode, Parametros};
 use crate::utiles::aux_hsv_to_rgb2;
 
@@ -71,7 +72,24 @@ pub fn green() { unimplemented!(); }
 
 pub fn hue() { unimplemented!(); }
 
-pub fn lerp_color() { unimplemented!(); }
+// Recibe dos colores y devuelve un color interpolado
+pub fn lerp_color(color1: PColor, color2: PColor, mut amt: f32) -> PColor {
+    if amt > 1.0 {
+        amt = 1.0;
+    }
+
+    if amt < 0.0 {
+        amt = 0.0;
+    }
+
+    let r0 = lerp(color1.r as f32, color2.r as f32, amt);
+    let r = constrain(r0, 0.0, 255.0) as u8;
+    let g0 = lerp(color1.g as f32, color2.g as f32, amt);
+    let g = constrain(g0, 0.0, 255.0) as u8;
+    let b0 = lerp(color1.b as f32, color2.b as f32, amt);
+    let b = constrain(b0, 0.0, 255.0) as u8;
+    pcolor4(r, g, b, 255)
+}
 
 pub fn red() { unimplemented!(); }
 
@@ -123,6 +141,10 @@ pub fn no_fill(param: &mut Parametros) {
 
 pub fn no_stroke(param: &mut Parametros) {
     param.stroke_bool = false;
+}
+
+pub fn stroke(stroke: PColor, param: &mut Parametros) {
+    param.stroke_color = stroke;
 }
 
 pub fn stroke1(v: f32, param: &mut Parametros) {

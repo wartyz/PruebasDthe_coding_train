@@ -50,10 +50,12 @@ Loading & Display
 use std::ops::Mul;
 use sdl2::gfx::primitives::DrawRenderer;
 use sdl2::pixels::Color;
+
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use crate::parametros::{ModosBeginShape, Parametros, RectMode};
 use crate::matem::*;
+use crate::parametros::ModosBeginShape::{Close, Lines};
 use crate::transform::{identity3x3, Matrix3x3};
 
 // Shape ************************************
@@ -380,26 +382,34 @@ pub fn end_shape(canvas: &mut Canvas<Window>, param: &mut Parametros, modo_close
     let mut vy = Vec::new();
 
     for v in &param.vertex {
-        let p = param.matriz_total * pvector3(v.x, v.y, 0.0);
+        let p = param.matriz_total * pvector3(v.x, v.y, 1.); // ojo 1. si no da error
+
         vx.push(p.x as i16);
         vy.push(p.y as i16);
     }
-    let st = Color::RGBA(
-        param.stroke_color.r,
-        param.stroke_color.g,
-        param.stroke_color.b,
-        param.stroke_color.a,
-    );
 
-    let _ = canvas.aa_polygon(&vx, &vy, st);
+    // Poner el inicio de nuevo
+    // let p = param.matriz_total * pvector3(param.vertex[0].x, param.vertex[0].y, 1.);
+    // vx.push(p.x as i16);
+    // vy.push(p.y as i16);
+
+    let st = param.get_stroke_color_rgba_sdl2();
+    let fi_color = param.get_fill_color_rgba_sdl2();
+
+    if modo_close == Lines {
+        let _ = canvas.aa_polygon(&vx, &vy, st);
+    }
+    if modo_close == Close {
+        let _ = canvas.filled_polygon(&vx, &vy, fi_color);
+    }
+
+    param.vertex.clear();
 }
 
 pub fn quadratic_vertex() { unimplemented!(); }
 
 pub fn vertex(x_vieja: f32, y_vieja: f32, param: &mut Parametros) {
-    let p0 = param.matriz_total * pvector3(x_vieja, y_vieja, 1.0); // w = 1 es punto
-
-    param.vertex.push(pvector2(p0.x, p0.y));
+    param.vertex.push(pvector2(x_vieja, y_vieja));
 }
 
 // Curves ***************************************

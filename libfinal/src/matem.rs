@@ -266,6 +266,13 @@ impl PVector3 {
         self.w += b.w;
     }
 
+    // Distancia entre este vector y otro
+    pub fn dist(&mut self, b: &PVector3) -> f32 {
+        let x = self.x - b.x;
+        let y = self.y - b.y;
+        ((x * x) + (y * y)).sqrt()
+    }
+
     // Divide este vector por un numero
     pub fn div(&mut self, b: f32) {
         self.x /= b;
@@ -288,6 +295,13 @@ impl PVector3 {
     // Devuelve la magnitud cuadrada de este vector
     pub fn mag_sq(&mut self) -> f32 {
         self.x * self.x + self.y * self.y
+    }
+
+    // Calcula el ángulo de rotación para este vector los vectores creados
+    // usando createVector() tomarán en consideración el ángulo de ángulo actual,
+    // y darán el ángulo en radianes o grados en consecuencia.
+    pub fn heading(&mut self) -> f32 {
+        self.y.atan2(self.x)
     }
 
     // Establece la magnitud de este vector
@@ -341,6 +355,11 @@ pub fn dist_s4(a: &PVector4, b: &PVector4) -> f32 {
     let y = a.y - b.y;
     let z = a.z - b.z;
     ((x * x) + (y * y) + (z * z)).sqrt()
+}
+
+// Resta de dos vectores
+pub fn sub_s(a: &PVector3, b: &PVector3) -> PVector3 {
+    pvector3(a.x - b.x, a.y - b.y, 0.0)
 }
 
 pub fn random_range(p0: f32, p1: f32) -> f32 {
