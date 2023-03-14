@@ -22,5 +22,6 @@ members = [
     "capitulos/078_Simple_Particle_System",
     "capitulos/081_1_Circle_Morphing_Part_1",
     "capitulos/085_The_Game_of_Life",
-    "capitulos/088_Snowfall"
+    "capitulos/088_Snowfall",
+    "capitulos/089_Langtonsant"
 ]

@@ -112,8 +112,16 @@ pub enum TipoFiltro {
 }
 
 impl PImage {
-    pub fn create_image() {
-        unimplemented!();
+    // Crea una nueva PImage
+    pub fn create_image(x: u32, y: u32) -> PImage {
+        let mut image = vec![vec![(0, 0, 0, 0); y as usize]; x as usize];
+
+        PImage {
+            image,
+            image_width: x,
+            image_height: y,
+            tint: (255, 255, 255),
+        }
     }
 
     // Pixels ********************************
