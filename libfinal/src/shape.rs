@@ -462,7 +462,7 @@ pub fn shape() { unimplemented!(); }
 
 // *************************  Funciones creadas por mi ***********************
 
-// USO VECTOR COLUMNA
+/*// USO VECTOR COLUMNA
 // Ojo para el cálculo la matriz es 0  1  2  3  y el vector  x
 //                                  4  5  6  7               y
 //                                  8  9 10 11               z
@@ -472,8 +472,8 @@ pub fn shape() { unimplemented!(); }
 pub struct Matrix4x4 {
     pub data: [f32; 16],
 }
-
-impl Matrix4x4 {
+*/
+/*impl Matrix4x4 {
     #[rustfmt::skip]
     pub fn new(
         m00: f32, m01: f32, m02: f32, m03: f32,
@@ -650,16 +650,16 @@ impl Matrix4x4 {
         matrix
     }
 }
-
-#[rustfmt::skip]
+*/
+/*#[rustfmt::skip]
 pub fn identity4x4() -> Matrix4x4 {
     Matrix4x4::new(1.0, 0.0, 0.0, 0.0,
                    0.0, 1.0, 0.0, 0.0,
                    0.0, 0.0, 1.0, 0.0,
                    0.0, 0.0, 0.0, 1.0, )
-}
+}*/
 
-// Escala igual en todos los ejes
+/*// Escala igual en todos los ejes
 #[rustfmt::skip]
 pub fn scale1_3d(v: f32, param: &mut Parametros) {
     let m = Matrix4x4 {
@@ -670,9 +670,9 @@ pub fn scale1_3d(v: f32, param: &mut Parametros) {
     };
 
     param.matriz_total3d = param.matriz_total3d * m
-}
+}*/
 
-// Translación respecto a los ejes globales
+/*// Translación respecto a los ejes globales
 #[rustfmt::skip]
 pub fn translate3d(x: f32, y: f32, z: f32, param: &mut Parametros) {
     let m = Matrix4x4 {
@@ -696,9 +696,9 @@ pub fn translate3d_inversa(x: f32, y: f32, z: f32, param: &mut Parametros) {
     };
 
     param.matriz_total3d = param.matriz_total3d * m;
-}
+}*/
 
-// carga la matriz de rotacion del eje x con una coordenada
+/*// carga la matriz de rotacion del eje x con una coordenada
 #[rustfmt::skip]
 pub fn rotate_x3d(angulo: f32, param: &mut Parametros) {
     let m = Matrix4x4 {
@@ -735,9 +735,9 @@ pub fn rotate_z3d(angulo: f32, param: &mut Parametros) {
     };
 
     param.matriz_total3d = param.matriz_total3d * m;
-}
+}*/
 
-// Producto de matrices
+/*// Producto de matrices
 impl Mul<Matrix4x4> for Matrix4x4 {
     type Output = Matrix4x4;
 
@@ -807,8 +807,8 @@ impl Mul<Matrix4x4> for Matrix4x4 {
         m
     }
 }
-
-impl Mul<PVector4> for Matrix4x4 {
+*/
+/*impl Mul<PVector4> for Matrix4x4 {
     type Output = PVector4;
 
     #[rustfmt::skip]
@@ -859,21 +859,27 @@ pub fn imprime_matriz_4x4(m: Matrix4x4) {
     );
     println!("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 }
-
-pub fn imprime_vector4(v: PVector4) {
-    println!("┏━━━━━━━━┓");
-    println!("\u{2503} {0: >6.2} \u{2503}", v.x); // ┃      ┃
-    println!("\u{2503} {0: >6.2} \u{2503}", v.y); // ┃      ┃
-    println!("\u{2503} {0: >6.2} \u{2503}", v.z); // ┃      ┃
-    println!("\u{2503} {0: >6.2} \u{2503}", v.w); // ┃      ┃
-    println!("┗━━━━━━━━┛");
-}
+*/
+// pub fn imprime_vector4(v: PVector4) {
+//     println!("┏━━━━━━━━┓");
+//     println!("\u{2503} {0: >6.2} \u{2503}", v.x); // ┃      ┃
+//     println!("\u{2503} {0: >6.2} \u{2503}", v.y); // ┃      ┃
+//     println!("\u{2503} {0: >6.2} \u{2503}", v.z); // ┃      ┃
+//     println!("\u{2503} {0: >6.2} \u{2503}", v.w); // ┃      ┃
+//     println!("┗━━━━━━━━┛");
+// }
 
 // 3d creadas por mi ************************************************************
 
 // Sentido contrario a las agujas de reloj
 
-pub fn draw_rectangulo_3d() { unimplemented!(); }
+pub fn draw_rectangulo_3d(_param: &mut Parametros,
+                          _va: PVector4,
+                          _vb: PVector4,
+                          _vc: PVector4,
+                          _vd: PVector4, ) {
+    //draw_triangulo_3d(param, va, vb, vc);
+}
 
 /*    d: &mut RaylibDrawHandle,
     param: &mut Parametros,
@@ -947,27 +953,27 @@ pub fn draw_rectangulo_3d() { unimplemented!(); }
 
 // Esta funcion es un cubo con puntos creado desde triangulos para que le afecten a todos los puntos las matrices
 // la posicion es el centro del cubo
-pub fn cubo3d() { unimplemented!(); }
-/*pub fn cubo3d(d: &mut RaylibDrawHandle, param: &mut Parametros, lado: f32) {
+
+pub fn cubo3d(_param: &mut Parametros, lado: f32) {
     let slado = lado / 2.0;
-    let puntos: Vec<Vector4> = vec![
-        Vector4::new(-slado, -slado, slado, 1.0),  // 0
-        Vector4::new(slado, -slado, slado, 1.0),   // 1
-        Vector4::new(slado, slado, slado, 1.0),    // 2
-        Vector4::new(-slado, slado, slado, 1.0),   // 3
-        Vector4::new(-slado, -slado, -slado, 1.0), // 4
-        Vector4::new(slado, -slado, -slado, 1.0),  // 5
-        Vector4::new(slado, slado, -slado, 1.0),   // 6
-        Vector4::new(-slado, slado, -slado, 1.0),  // 7
+    let _puntos: Vec<PVector4> = vec![
+        pvector4(-slado, -slado, slado, 1.0),  // 0
+        pvector4(slado, -slado, slado, 1.0),   // 1
+        pvector4(slado, slado, slado, 1.0),    // 2
+        pvector4(-slado, slado, slado, 1.0),   // 3
+        pvector4(-slado, -slado, -slado, 1.0), // 4
+        pvector4(slado, -slado, -slado, 1.0),  // 5
+        pvector4(slado, slado, -slado, 1.0),   // 6
+        pvector4(-slado, slado, -slado, 1.0),  // 7
     ];
 
     // la matriz total3d, se aplica al renderizar los triangulos
 
-    draw_rectangulo_3d(d, param, puntos[0], puntos[1], puntos[2], puntos[3]);
-    draw_rectangulo_3d(d, param, puntos[1], puntos[5], puntos[6], puntos[2]);
-    draw_rectangulo_3d(d, param, puntos[5], puntos[4], puntos[7], puntos[6]);
-    draw_rectangulo_3d(d, param, puntos[0], puntos[3], puntos[7], puntos[4]);
-    draw_rectangulo_3d(d, param, puntos[2], puntos[6], puntos[7], puntos[3]);
-    draw_rectangulo_3d(d, param, puntos[0], puntos[4], puntos[5], puntos[1]);
-}*/
+    //draw_rectangulo_3d(param, puntos[0], puntos[1], puntos[2], puntos[3]);
+    // draw_rectangulo_3d(d, param, puntos[1], puntos[5], puntos[6], puntos[2]);
+    // draw_rectangulo_3d(d, param, puntos[5], puntos[4], puntos[7], puntos[6]);
+    // draw_rectangulo_3d(d, param, puntos[0], puntos[3], puntos[7], puntos[4]);
+    // draw_rectangulo_3d(d, param, puntos[2], puntos[6], puntos[7], puntos[3]);
+    // draw_rectangulo_3d(d, param, puntos[0], puntos[4], puntos[5], puntos[1]);
+}
 

@@ -3,9 +3,10 @@ use libfinal::engine::{Canvas, Window};
 use libfinal::matem::{PVector4, pvector4};
 
 use libfinal::parametros::Parametros;
+use libfinal::shape::cubo3d;
+use libfinal::transform3d::{pop_matrix3d, push_matrix3d, translate3d};
 
 use libfinal::transform::translate;
-use libfinal::shape::{boxy, cubo3d, pop_matrix3d, push_matrix3d, translate3d};
 
 pub struct Boxy {
     pos: PVector4,
@@ -41,12 +42,12 @@ impl Boxy {
         boxes
     }
 
-    pub fn show(&mut self, canvas: &mut Canvas<Window>, param: &mut Parametros) {
+    pub fn show(&mut self, param: &mut Parametros) {
         push_matrix3d(param);
         translate3d(self.pos.x, self.pos.y, self.pos.z, param);
         no_stroke(param);
         fill2(255.0, 250.0, param);
-        //cubo3d(canvas, param, self.r);
+        cubo3d(param, self.r);
         pop_matrix3d(param);
     }
 }

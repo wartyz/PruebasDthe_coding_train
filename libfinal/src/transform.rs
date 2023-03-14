@@ -342,6 +342,25 @@ impl Mul<PVector3> for Matrix3x3 {
     }
 }
 
+// Producto vectorial entre dos vectores
+impl Mul for PVector3 {
+    type Output = PVector3;
+
+    fn mul(self, other: PVector3) -> PVector3 {
+        PVector3 {
+            x: self.y * other.w - self.w * other.y,
+            y: self.w * other.x - self.x * other.w,
+            w: self.x * other.y - self.y * other.x,
+        }
+    }
+}
+
+// Productor escalar entre dos vectores
+
+pub fn mul_escalar(v0: PVector3, v1: PVector3) -> f32 {
+    v0.x * v1.x + v0.y * v1.y + v0.w * v1.w
+}
+
 pub fn imprime_matriz_3x3(m: Matrix3x3) {
     println!("┏━━━━━━━━━━━━━━━━━━━━━━━┓");
 

@@ -1,6 +1,7 @@
 use libfinal::engine::{Canvas, Engine, Window};
 use libfinal::environment::full_screen;
 use libfinal::matem::{dist_s, PVector4, pvector4};
+use crate::boxy::Boxy;
 
 // Ancho y alto de la pantalla
 pub const ANCHO: u32 = 600;
@@ -9,9 +10,13 @@ pub const ALTO: u32 = 400;
 // Aqui vendrá el pseudocódigo javascript
 pub struct Sketch {
     pub engine: Engine,
+    angulo_camara: f32,
     distancia_camara: f32,
 
     // Variables globales del scketch
+    a: f32,
+
+    sponge: Vec<Boxy>,
 }
 
 impl Default for Sketch {
@@ -27,7 +32,7 @@ impl Sketch {
         engine.param.ancho = ANCHO as f32;
         engine.param.alto = ALTO as f32;
 
-        let distancia_camara = dist_s(
+        let distancia_camara = PVector4::dist_s(
             &PVector4::default(),
             &pvector4(
                 engine.param.camara.posx,
@@ -38,7 +43,11 @@ impl Sketch {
         );
         Sketch {
             engine,
+            angulo_camara: 0.0,
             distancia_camara,
+            a: 0.0,
+
+            sponge: vec![Boxy::new(0.0, 0.0, 0.0, 200.0)],
         }
     }
     pub fn pre_load(&mut self) {
