@@ -122,6 +122,6 @@ impl Sketch {
         for pos in &self.path {
             vertex(pos.x, pos.y, &mut self.engine.param);
         }
-        end_shape(canvas, &mut self.engine.param, ModosBeginShape::NadaShape);
+        end_shape(canvas, &mut self.engine.param, ModosBeginShape::Lines);
     }
 }

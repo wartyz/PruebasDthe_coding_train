@@ -10,7 +10,7 @@ pub mod sketch;
 
 fn main() {
     println!("directorio actual = {:?}", current_dir());
-    test01();
+    test03();
 }
 
 fn test01() {
@@ -73,6 +73,31 @@ fn test02() {
         stroke3(255., 0., 0., &mut game.engine.param);
         fill3(255., 255., 0., &mut game.engine.param);
         ellipse(&mut canvas, &mut game.engine.param, 400., 400., 100., 200.);
+
+        canvas.present();
+    }
+}
+
+fn test03() {
+    let mut game = Sketch::new();
+    //game.pre_load(); // Se ejecuta antes que setup()
+
+    let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
+    let mut imagen = PImage::load_image(&mut canvas, "resources/imagenes/flakes32pba.bmp").unwrap();
+    game.setup();
+
+    // Bucle principal ***********************************************************************
+    'main_loop: loop {
+        if !game.update() {
+            break 'main_loop;
+        }
+        let x = 15 * 32;
+        let y = 15 * 32;
+        let img: PImage = imagen.get_trozo(x as usize, y as usize);
+        //img.update_pixels(&mut canvas);
+        img.image3(&mut canvas, 0, 0, 100, 100);
+
+        //game.draw(&mut canvas);
 
         canvas.present();
     }

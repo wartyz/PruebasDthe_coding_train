@@ -88,6 +88,8 @@ use sdl2::video::Window;
 use std::error::Error;
 use std::path::Path;
 use sdl2::pixels::PixelFormatEnum;
+use crate::matem::pvector3;
+use crate::parametros::{ImageMode, Parametros};
 /* **********************  Image   ****************************************************/
 #[derive(Debug, Clone, Default)]
 pub struct PImage {
@@ -128,10 +130,10 @@ impl PImage {
         unimplemented!();
     }
 
-    // Carga los datos de píxeles de la ventana en el arreglo self.image.
-    // Siempre se debe llamar a esta función antes de leer o escribir en self.image.
-    // Los cambios posteriores en la ventana de visualización no se reflejarán en píxeles
-    // hasta que se vuelva a llamar a loadPixels().
+    /// Carga los datos de píxeles de la ventana en el arreglo self.image.
+    /// Siempre se debe llamar a esta función antes de leer o escribir en self.image.
+    /// Los cambios posteriores en la ventana de visualización no se reflejarán en píxeles
+    /// hasta que se vuelva a llamar a loadPixels().
     pub fn load_pixels(&mut self, canvas: &mut Canvas<Window>) {
         let anch = canvas.viewport().width() as u32;
         let alt = canvas.viewport().height() as u32;
@@ -190,8 +192,85 @@ impl PImage {
         unimplemented!();
     }
 
-    pub fn get() {
+    /// aqui devuelvela imagen completa
+    pub fn get0(&mut self) {
         unimplemented!();
+    }
+
+    /// aqui obtiene el valor de un pixel si está fuera de la ventana se devuelve mnegro
+    pub fn get2(&mut self, _x: f32, _y: f32) {
+        unimplemented!();
+    }
+
+    /// aqui obtiene una seccion del vector en self
+    pub fn get4(&mut self, canvas: &mut Canvas<Window>, x: i32, y: i32, anch: u32, alt: u32) -> Option<PImage> {
+        let texture_creator = canvas.texture_creator();
+
+        let format = ARGB8888;
+        let mut texture = texture_creator
+            .create_texture_target(format, anch, alt)
+            .unwrap();
+
+        let format = texture.query().format;
+        dbg!(format); // ARGB8888
+
+        /* canvas
+             .with_texture_canvas(&mut texture, |texture_canvas| {
+                 texture_canvas
+                     .fill_rect(Rect::new(x, y, anch, alt))
+                     .unwrap();
+                 // Dibujar lo que quieras en la textura.
+             })
+             .unwrap();*/
+
+        // Obtener el formato de píxeles de la textura
+        //let format = texture.query().format;
+
+        let rect = Rect::new(x, y, anch, alt);
+
+        // Leer los píxeles de la textura en el buffer, mal, no en el canvas!!!!!!!!!
+        let bytes = canvas.read_pixels(rect, format).unwrap();
+
+        /*   // Creo una surface vacia, no se como enlazarla con self.image
+           let surface = Surface::new(anch, alt, BGRA8888).unwrap();
+
+           let pixels = surface.without_lock().unwrap();
+
+           println!(
+               "width, height, pitch, size ({:?}, {:?}, {:?}, {:?})",
+               surface.width(),
+               surface.height(),
+               surface.pitch(),
+               surface.size()
+           );*/
+        let kk: Vec<Vec<(u8, u8, u8, u8)>> = bytes
+            .chunks(4) // crea de [1,2,3,4,5,6..] a [1,2,3,4],[5,6,7,8]...
+            // Crea una tupla de cada pequeño arreglo
+            .map(|chunk| {
+                let b = chunk[0];
+                let g = chunk[1];
+                let r = chunk[2];
+                let a = chunk[3];
+                (b, g, r, a)
+            })
+            .collect::<Vec<(u8, u8, u8, u8)>>()
+            // anch es la anchura de la imagen, crea arreglos  de tamaño anchura
+            .chunks(anch as usize)
+            // convierte cada arreglo a vector
+            .map(|row| row.to_vec())
+            .collect();
+
+        // Creamos el array transpuesto porque sino no coincide con las demás funciones
+        let image = (0..kk[0].len())
+            .map(|col_index| kk.iter().map(|row| row[col_index]).collect())
+            .collect();
+
+        Some(PImage {
+            image,
+            image_width: anch,
+            image_height: alt,
+            tint: (255, 255, 255),
+        })
     }
 
     // ------pixels[]
@@ -200,12 +279,12 @@ impl PImage {
         unimplemented!();
     }
 
-    // Actualiza la ventana de visualización con los datos del arreglo en Self de image.
-
+    /// Actualiza la ventana de visualización con los datos del arreglo en Self de image.
     pub fn update_pixels(&self, canvas: &mut Canvas<Window>) {
         //dbg!(self.image[100][200]);
-        //dbg!(self.image.len()); // 482
-        //dbg!(self.image[0][0]);
+        // dbg!(self.image.len());
+        // dbg!(self.image[0].len());
+        // dbg!(self.image[0][0]);
         //dbg!(self.image[1][0]);
 
         let texture_creator: TextureCreator<_> = canvas.texture_creator();
@@ -267,12 +346,80 @@ impl PImage {
 
     // Loading & Displaying ********************************
 
-    pub fn image_mode() {
-        unimplemented!();
+    pub fn image_mode(param: &mut Parametros, modo: ImageMode) {
+        param.image_mode = modo;
     }
 
-    pub fn image() {
-        unimplemented!();
+    pub fn image3(&self, canvas: &mut Canvas<Window>, x: i32, y: i32, destx: u32, desty: u32) {
+        let texture_creator: TextureCreator<_> = canvas.texture_creator();
+
+        let format = ARGB8888;
+
+        let mut texture: Texture = texture_creator
+            .create_texture_streaming(format, self.image_width, self.image_height)
+            .unwrap();
+
+        texture
+            .with_lock(None, |buffer: &mut [u8], _: usize| {
+                for x in 0..self.image_width as usize {
+                    for y in 0..self.image[x].len() {
+                        let index = (y * self.image_width as usize + x) * 4;
+
+                        buffer[index] = self.image[x][y].0; // B
+                        buffer[index + 1] = self.image[x][y].1; // G
+                        buffer[index + 2] = self.image[x][y].2; // R
+                        buffer[index + 3] = self.image[x][y].3; // A
+                    }
+                }
+            })
+            .expect("Error en image3");
+
+        // Renderiza la textura en la ventana
+        canvas.set_blend_mode(BlendMode::Blend);
+        dbg!(x, y);
+        //let dst_rect = Rect::new(x, y, self.image_width, self.image_height);
+        let dst_rect = Rect::new(x, y, destx, desty);
+
+        canvas.copy(&texture, None, dst_rect).unwrap();
+    }
+
+    pub fn image5(&self, canvas: &mut Canvas<Window>, param: &mut Parametros, x_vieja: i32, y_vieja: i32, ancho: u32, alto: u32) {
+        let texture_creator: TextureCreator<_> = canvas.texture_creator();
+
+        let format = ARGB8888;
+
+        let mut texture: Texture = texture_creator
+            .create_texture_streaming(format, ancho as u32, alto as u32)
+            .unwrap();
+
+        texture
+            .with_lock(None, |buffer: &mut [u8], _: usize| {
+                for x in 0..ancho as usize {
+                    for y in 0..alto as usize {
+                        let index = (y * ancho as usize + x) * 4;
+
+                        buffer[index] = self.image[x][y].0; // B
+                        buffer[index + 1] = self.image[x][y].1; // G
+                        buffer[index + 2] = self.image[x][y].2; // R
+                        buffer[index + 3] = self.image[x][y].3; // A
+                    }
+                }
+            })
+            .expect("Error en image3");
+
+        // Renderiza la textura en la ventana
+        //canvas.set_blend_mode(BlendMode::Blend);
+        //dbg!(param.matriz_total);
+        let p = param.matriz_total * pvector3(x_vieja as f32, y_vieja as f32, 1.0);
+        //dbg!(x_vieja, y_vieja);
+        //dbg!(p.x,p.y);
+        //let dst_rect = Rect::new(x, y, self.image_width, self.image_height);
+        //dbg!(ancho);
+        //dbg!(alto);
+
+        let dst_rect = Rect::new(p.x as i32, p.y as i32, ancho, alto);
+
+        canvas.copy(&texture, None, dst_rect).unwrap();
     }
 
     // Carga una imagen en una variable de tipo PImage.
@@ -363,6 +510,28 @@ impl PImage {
     pub fn texture() {
         unimplemented!();
     }
+
+    // Función inventada por mi
+    pub fn get_trozo(&self, mut x0: usize, mut y0: usize) -> PImage {
+        //dbg!(x0,y0);
+
+        let mut trozo: Vec<Vec<(u8, u8, u8, u8)>> = vec![];
+        for x in 0..32 {
+            let mut colum: Vec<(u8, u8, u8, u8)> = vec![];
+            for y in 0..32 {
+                //colum.push(self.image[x + x0][y + y0].clone())
+                colum.push(self.image[x + x0][y + y0].clone())
+            }
+            trozo.push(colum);
+        }
+
+        PImage {
+            image: trozo,
+            image_width: 32,
+            image_height: 32,
+            tint: (255, 255, 255),
+        }
+    }
 }
 
 // ****** Funciones creadas por mi ************************************
@@ -384,3 +553,24 @@ pub fn pimage_vacio() -> PImage {
         tint: (255, 255, 255),
     }
 }
+
+// pub fn lee_png(canvas: &mut Canvas<Window>) -> Texture<'static> {
+//
+// }
+
+pub fn renderiza(canvas: &mut Canvas<Window>, param: &mut Parametros, x_vieja: f32, y_vieja: f32, ancho: u32, alto: u32) {
+    let texture_creator: TextureCreator<_> = canvas.texture_creator();
+    let texture: Texture = texture_creator.load_texture("resources/imagenes/flakes32.png").unwrap();
+
+    //canvas.set_draw_color(Color::RGBA(255, 255, 255, 255));
+    //canvas.clear();
+    let p = param.matriz_total * pvector3(x_vieja as f32, y_vieja as f32, 1.0);
+
+    //let TextureQuery { width, height, .. } = texture.query();
+    let sce = Rect::new(0, 0, 32, 32);
+    let dst = Rect::new(p.x as i32, p.y as i32, ancho, alto);
+
+    canvas.copy(&texture, Some(sce), Some(dst));
+}
+
+

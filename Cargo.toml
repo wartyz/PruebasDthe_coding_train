@@ -21,5 +21,6 @@ members = [
     "capitulos/069_1_Evolutionary_Steering_Behaviors",
     "capitulos/078_Simple_Particle_System",
     "capitulos/081_1_Circle_Morphing_Part_1",
-    "capitulos/085_The_Game_of_Life"
+    "capitulos/085_The_Game_of_Life",
+    "capitulos/088_Snowfall"
 ]

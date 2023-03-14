@@ -173,7 +173,9 @@ pub fn min() { unimplemented!(); }
 
 pub fn norm() { unimplemented!(); }
 
-pub fn pow() { unimplemented!(); }
+pub fn pow(a: f32, pot: i32) -> f32 {
+    a.powi(pot)
+}
 
 pub fn round() { unimplemented!(); }
 
