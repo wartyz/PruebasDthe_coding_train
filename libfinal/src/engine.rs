@@ -69,12 +69,12 @@ impl Engine {
                     mouse_btn: MouseButton::Left,
                     ..
                 } => {
-                    println!("MouseButtonDown");
+                    //println!("MouseButtonDown");
 
                     self.param.mouse_boton_mantiene = CodigosRaton::Izquierdo;
                 }
                 Event::MouseMotion { x, y, .. } => {
-                    println!("MouseMotion");
+                    //println!("MouseMotion");
                     self.param.mouse_posicion.x = x as f32;
                     self.param.mouse_posicion.y = y as f32;
                 }

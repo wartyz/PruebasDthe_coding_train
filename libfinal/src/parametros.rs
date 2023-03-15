@@ -1,8 +1,12 @@
 use sdl2::pixels::Color;
+use sdl2::Sdl;
 use crate::color::{pcolor4, PColor};
 use crate::matem::{PVector2, pvector2};
 use crate::transform3d::{identity4x4, Matrix4x4};
 use crate::transform::{identity3x3, Matrix3x3};
+use gl::types::GLuint;
+use crate::render_gl;
+use crate::render_gl::Program;
 
 // Para función angleMode() -------------------------------------
 #[derive(Debug, Copy, Clone)]
@@ -147,7 +151,8 @@ impl Default for Camara {
     }
 }
 
-#[derive(Debug, Clone)]
+//#[derive(Debug, Clone)]
+
 pub struct Parametros {
     pub ancho: f32,
     pub alto: f32,
@@ -214,6 +219,12 @@ pub struct Parametros {
 
     // Indica si se debe crear una pantalla full screen
     pub full_screen: bool,
+
+    // Programa creado Shader
+    pub shader_program: Program,
+    pub vao: GLuint,
+    pub vbo: GLuint,
+
 }
 
 impl Default for Parametros {
@@ -268,6 +279,11 @@ impl Parametros {
             distancia_cuadrado_eje: 0.0,
             framecount: 0,
             full_screen: false,
+
+            shader_program: Program { id: 0 },
+            vao: 0,
+            vbo: 0,
+
         }
     }
 

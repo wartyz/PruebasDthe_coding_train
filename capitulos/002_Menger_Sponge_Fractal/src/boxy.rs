@@ -1,11 +1,9 @@
 use libfinal::color::{fill2, no_stroke};
 use libfinal::engine::{Canvas, Window};
 use libfinal::matem::{PVector4, pvector4};
-
 use libfinal::parametros::Parametros;
 use libfinal::shape::cubo3d;
 use libfinal::transform3d::{pop_matrix3d, push_matrix3d, translate3d};
-
 use libfinal::transform::translate;
 
 pub struct Boxy {

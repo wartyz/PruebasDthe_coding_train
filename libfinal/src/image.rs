@@ -114,7 +114,7 @@ pub enum TipoFiltro {
 impl PImage {
     // Crea una nueva PImage
     pub fn create_image(x: u32, y: u32) -> PImage {
-        let mut image = vec![vec![(0, 0, 0, 0); y as usize]; x as usize];
+        let image = vec![vec![(0, 0, 0, 0); y as usize]; x as usize];
 
         PImage {
             image,
@@ -215,7 +215,7 @@ impl PImage {
         let texture_creator = canvas.texture_creator();
 
         let format = ARGB8888;
-        let mut texture = texture_creator
+        let texture = texture_creator
             .create_texture_target(format, anch, alt)
             .unwrap();
 
@@ -520,7 +520,7 @@ impl PImage {
     }
 
     // Función inventada por mi
-    pub fn get_trozo(&self, mut x0: usize, mut y0: usize) -> PImage {
+    pub fn get_trozo(&self, x0: usize, y0: usize) -> PImage {
         //dbg!(x0,y0);
 
         let mut trozo: Vec<Vec<(u8, u8, u8, u8)>> = vec![];
