@@ -2,7 +2,7 @@ use libfinal::engine::{Canvas, Engine, Window};
 
 // Ancho y alto de la pantalla
 pub const ANCHO: u32 = 1000;
-pub const ALTO: u32 = 800;
+pub const ALTO: u32 = 1000;
 
 // Aqui vendrá el pseudocódigo javascript
 pub struct Sketch {

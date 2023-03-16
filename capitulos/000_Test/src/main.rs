@@ -11,7 +11,7 @@ pub mod sketch;
 
 fn main() {
     println!("directorio actual = {:?}", current_dir());
-    test05();
+    test06(sketch::ANCHO, sketch::ALTO);
 }
 
 fn _test01() {
@@ -126,13 +126,13 @@ fn _test04() {
     // }
 }
 
-fn test05() {
+fn _test05(ancho: u32, alto: u32) {
     let mut game = Sketch::new();
     //game.pre_load(); // Se ejecuta antes que setup()
 
     //let mut canvas = size(&mut game.engine, 900, 700);
 
-    let window = size_opengl(&mut game.engine, 1200, 800);
+    let window = size_opengl(&mut game.engine, ancho, alto);
     //Shader::createshaders(&mut game.engine.param);
     game.setup();
 
@@ -153,5 +153,32 @@ fn test05() {
         window.gl_swap_window();
 
         //canvas.present();
+    }
+}
+
+fn test06(ancho: u32, alto: u32) {
+    let mut game = Sketch::new();
+    //game.pre_load(); // Se ejecuta antes que setup()
+
+    let mut canvas = size(&mut game.engine, ancho, alto);
+
+    game.setup();
+    let mut rot: f32 = 0.;
+
+    // Bucle principal ***********************************************************************
+    'main_loop: loop {
+        if !game.update() {
+            break 'main_loop;
+        }
+        Camera::dibujar_cubo(&mut canvas, rot);
+        rot += 0.01;
+
+        if rot > 2. * PI {
+            rot = 0.;
+        }
+
+        game.draw(&mut canvas);
+
+        canvas.present();
     }
 }
