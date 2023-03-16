@@ -111,7 +111,7 @@ pub enum ImageMode {
     Center,
 }
 
-// Para vision 3d
+/*// Para vision 3d
 #[derive(Debug, Clone)]
 pub struct Camara {
     // Posición de la cámara
@@ -149,7 +149,7 @@ impl Default for Camara {
             fovy: 45.0,
         }
     }
-}
+}*/
 
 //#[derive(Debug, Clone)]
 
@@ -210,7 +210,7 @@ pub struct Parametros {
     pub background_1_vez: bool,
 
     // para visión 3d
-    pub camara: Camara,
+    //pub camara: Camara,
     // En ejes distancia del cuadrado al centro
     pub distancia_cuadrado_eje: f32,
 
@@ -275,7 +275,7 @@ impl Parametros {
 
             background_1_vez: false,
 
-            camara: Camara::default(),
+            //camara: Camara::default(),
             distancia_cuadrado_eje: 0.0,
             framecount: 0,
             full_screen: false,

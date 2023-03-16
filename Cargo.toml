@@ -15,6 +15,7 @@ members = [
     "capitulos/033_Poisson_disc",
     "capitulos/034_Diffusion_Limited_Aggregation",
     "capitulos/050_1b_Animated_Circle_Packing_Part_1",
+    "capitulos/056_Attraction_and_Repulsion_Forces",
     "capitulos/061_Fractal_Spirograph",
     "capitulos/064_1_Forward_Kinematics",
     "capitulos/067_Pong",

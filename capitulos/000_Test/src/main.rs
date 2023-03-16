@@ -170,8 +170,8 @@ fn test06(ancho: u32, alto: u32) {
         if !game.update() {
             break 'main_loop;
         }
-        Camera::dibujar_cubo(&mut canvas, rot);
-        rot += 0.01;
+        Camera::dibujar_cubo2(&mut canvas, rot);
+        rot += 0.02;
 
         if rot > 2. * PI {
             rot = 0.;
