@@ -1,4 +1,5 @@
 use std::env::current_dir;
+use std::process::Command;
 use libfinal::environment::size;
 use sketch::Sketch;
 
@@ -6,6 +7,7 @@ pub mod sketch;
 
 fn main() {
     println!("directorio actual = {:?}", current_dir());
+
     // Command::new("ls")
     //     //.current_dir("/bin")
     //     .spawn()
@@ -16,7 +18,7 @@ fn main() {
 
     let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
 
-    game.setup();
+    game.setup(&mut canvas);
 
     // Bucle principal ***********************************************************************
     'main_loop: loop {

@@ -24,5 +24,6 @@ members = [
     "capitulos/081_1_Circle_Morphing_Part_1",
     "capitulos/085_The_Game_of_Life",
     "capitulos/088_Snowfall",
-    "capitulos/089_Langtonsant"
+    "capitulos/089_Langtonsant",
+    "capitulos/090_Floyd-Steinberg_Dithering"
 ]

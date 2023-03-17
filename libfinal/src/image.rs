@@ -89,7 +89,7 @@ use std::error::Error;
 use std::path::Path;
 use sdl2::pixels::PixelFormatEnum;
 use crate::matem::pvector3;
-use crate::parametros::{ImageMode, Parametros};
+use crate::parametros::{Filtros, ImageMode, Parametros};
 /* **********************  Image   ****************************************************/
 #[derive(Debug, Clone, Default)]
 pub struct PImage {
@@ -134,8 +134,14 @@ impl PImage {
         unimplemented!();
     }
 
-    pub fn filter() {
-        unimplemented!();
+    pub fn filter(&mut self, filt: Filtros) {
+        match filt {
+            Filtros::NoFiltro => {}
+            Filtros::Gray => self.color_grayscale(),
+            _ => {}
+        }
+
+        //self.image.color_tint(color);
     }
 
     /// Carga los datos de píxeles de la ventana en el arreglo self.image.
@@ -539,6 +545,22 @@ impl PImage {
             image_height: 32,
             tint: (255, 255, 255),
         }
+    }
+
+    // Función creada por mi, convierte self.image a grises
+
+    fn color_grayscale(&mut self) {
+        let mut result = Vec::with_capacity(self.image.len());
+        for row in &self.image {
+            let mut new_row = Vec::with_capacity(row.len());
+            for pixel in row {
+                let gray_value = (pixel.0 as f32 * 0.3 + pixel.1 as f32 * 0.59 + pixel.2 as f32 * 0.11) as u8;
+                let gray_pixel = (gray_value, gray_value, gray_value, pixel.3);
+                new_row.push(gray_pixel);
+            }
+            result.push(new_row);
+        }
+        self.image = result;
     }
 }
 

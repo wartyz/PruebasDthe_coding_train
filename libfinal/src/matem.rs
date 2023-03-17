@@ -177,7 +177,10 @@ pub fn pow(a: f32, pot: i32) -> f32 {
     a.powi(pot)
 }
 
-pub fn round() { unimplemented!(); }
+// Calcula el entero más cercano al parámetro n.  Por ejemplo, round(133.8) devuelve el valor 134.
+pub fn round(n: f32) -> f32 {
+    n.round()
+}
 
 pub fn sq() { unimplemented!(); }
 

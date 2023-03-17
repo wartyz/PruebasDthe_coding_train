@@ -48,7 +48,10 @@ impl PColor {
 // **************** Creating & Reading ************************
 pub fn alpha() { unimplemented!(); }
 
-pub fn blue() { unimplemented!(); }
+// Extrae el valor azul de un color.
+pub fn blue(pcolor: &(u8, u8, u8, u8)) -> u8 {
+    pcolor.2
+}
 
 // Extrae el valor de brillo HSB de un objeto Color.
 // Luminance (standard for certain colour spaces): (0.2126*R + 0.7152*G + 0.0722*B)
@@ -68,7 +71,10 @@ pub fn pcolor4(r: u8, g: u8, b: u8, a: u8) -> PColor {
     PColor::new4(r, g, b, a)
 }
 
-pub fn green() { unimplemented!(); }
+// Extrae el valor verde de un color.
+pub fn green(pcolor: &(u8, u8, u8, u8)) -> u8 {
+    pcolor.1
+}
 
 pub fn hue() { unimplemented!(); }
 
@@ -91,7 +97,10 @@ pub fn lerp_color(color1: PColor, color2: PColor, mut amt: f32) -> PColor {
     pcolor4(r, g, b, 255)
 }
 
-pub fn red() { unimplemented!(); }
+// Extrae el valor rojo de un color.
+pub fn red(pcolor: &(u8, u8, u8, u8)) -> u8 {
+    pcolor.0
+}
 
 pub fn saturation() { unimplemented!(); }
 
@@ -176,5 +185,10 @@ pub fn stroke3(r: f32, g: f32, b: f32, param: &mut Parametros) {
 // Funciones creadas por mi **********************************
 pub fn color4(r: u8, g: u8, b: u8, a: u8) -> PColor {
     PColor { r, g, b, a }
+}
+
+// Devuelve un vector de tupla (f32,f32,f32,f32)
+pub fn vec3_color(r: f32, g: f32, b: f32, a: f32) -> Vec<(u8, u8, u8, u8)> {
+    vec!((r as u8, g as u8, b as u8, a as u8))
 }
 
