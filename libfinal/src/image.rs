@@ -88,6 +88,7 @@ use sdl2::video::Window;
 use std::error::Error;
 use std::path::Path;
 use sdl2::pixels::PixelFormatEnum;
+use zimage::GenericImageView;
 use crate::matem::pvector3;
 use crate::parametros::{Filtros, ImageMode, Parametros};
 /* **********************  Image   ****************************************************/
@@ -436,69 +437,6 @@ impl PImage {
         canvas.copy(&texture, None, dst_rect).unwrap();
     }
 
-    // Carga una imagen en una variable de tipo PImage.
-    // Solo carga .bmp   debe ser de formato ARGB8888 osea 32 bits
-    pub fn load_image(
-        canvas: &mut Canvas<Window>,
-        filename: &str,
-    ) -> Option<PImage> {
-        let texture_creator = canvas.texture_creator();
-        let path = Path::new(filename);
-        dbg!(path);
-
-        let texture = texture_creator.load_texture(path).unwrap();
-        let format = texture.query().format;
-        dbg!(format); // ARGB8888
-
-        let image_width = texture.query().width;
-        let image_height = texture.query().height;
-
-        let surface = Surface::load_bmp(filename).unwrap();
-
-        let pixels = surface.without_lock().unwrap();
-
-        println!("Path {:?}", Path::new(filename));
-        println!(
-            "width, height, pitch, size ({:?}, {:?}, {:?}, {:?})",
-            surface.width(),
-            surface.height(),
-            surface.pitch(),
-            surface.size()
-        );
-
-        // Creamos un vector para contener los datos de la imagen
-        let mut image: Vec<Vec<(u8, u8, u8, u8)>> = vec![];
-        /* for y in 0..image_height as usize {
-        let mut vv = vec![];
-        for x in 0..image_width as usize {
-            let index = (y * image_width as usize + x) * 4;*/
-
-        for x in 0..image_width as usize {
-            let mut vv = vec![];
-            for y in 0..image_height as usize {
-                let index = (y * image_width as usize + x) * 4;
-
-                let valor = (
-                    pixels[index],
-                    pixels[index + 1],
-                    pixels[index + 2],
-                    pixels[index + 3],
-                );
-
-                vv.push(valor);
-            }
-
-            image.push(vv);
-        }
-
-        Some(PImage {
-            image,
-            image_width,
-            image_height,
-            tint: (255, 255, 255),
-        })
-    }
-
     pub fn no_tint() {
         unimplemented!();
     }
@@ -601,6 +539,110 @@ pub fn renderiza(canvas: &mut Canvas<Window>, param: &mut Parametros, x_vieja: f
     let dst = Rect::new(p.x as i32, p.y as i32, ancho, alto);
 
     canvas.copy(&texture, Some(sce), Some(dst));
+}
+
+// Carga una imagen en una variable de tipo PImage.
+// Solo carga .bmp   debe ser de formato ARGB8888 osea 32 bits
+pub fn load_image_bmp(
+    canvas: &mut Canvas<Window>,
+    filename: &str,
+) -> Option<PImage> {
+    let texture_creator = canvas.texture_creator();
+    let path = Path::new(filename);
+    dbg!(path);
+
+    let texture = texture_creator.load_texture(path).unwrap();
+    let format = texture.query().format;
+    dbg!(format); // ARGB8888
+
+    let image_width = texture.query().width;
+    let image_height = texture.query().height;
+
+    let surface = Surface::load_bmp(filename).unwrap();
+
+    let pixels = surface.without_lock().unwrap();
+
+    println!("Path {:?}", Path::new(filename));
+    println!(
+        "width, height, pitch, size ({:?}, {:?}, {:?}, {:?})",
+        surface.width(),
+        surface.height(),
+        surface.pitch(),
+        surface.size()
+    );
+
+    // Creamos un vector para contener los datos de la imagen
+    let mut image: Vec<Vec<(u8, u8, u8, u8)>> = vec![];
+    /* for y in 0..image_height as usize {
+    let mut vv = vec![];
+    for x in 0..image_width as usize {
+        let index = (y * image_width as usize + x) * 4;*/
+
+    for x in 0..image_width as usize {
+        let mut vv = vec![];
+        for y in 0..image_height as usize {
+            let index = (y * image_width as usize + x) * 4;
+
+            let valor = (
+                pixels[index],
+                pixels[index + 1],
+                pixels[index + 2],
+                pixels[index + 3],
+            );
+
+            vv.push(valor);
+        }
+
+        image.push(vv);
+    }
+
+    Some(PImage {
+        image,
+        image_width,
+        image_height,
+        tint: (255, 255, 255),
+    })
+}
+
+// Desde un fichero png, crea PImage
+pub fn load_image_png(filename: &str) -> Option<PImage> {
+    let mut p = pimage_vacio();
+    let format = zimage::guess_format(filename.as_bytes());
+    dbg!(format);
+    if let Ok(pimage) = zimage::open(filename) { // ImageReader::open(filename) {
+        //let (width, height) = pimage.into_dimensions().unwrap();
+
+        let (width, height) = pimage.dimensions();
+        //let width = 500;
+        //let height = 482;
+
+        let mut pixels = Vec::with_capacity((width * height) as usize);
+
+        //for y in 0..height {
+        for x in 0..width {
+            //let mut row = Vec::with_capacity(width as usize);
+            let mut row = Vec::with_capacity(height as usize);
+            //for x in 0..width {
+            for y in 0..height {
+                let pixel = pimage.get_pixel(x, y);
+                // Es RGBA y hay que pasarlo a BGRA para que lo puedan leer las otras funciones
+                row.push((pixel[2], pixel[1], pixel[0], pixel[3]));
+            }
+            pixels.push(row);
+        }
+        dbg!(pixels.len());
+        dbg!(pixels[0].len());
+        dbg!(pixels[0][0]);
+        dbg!(pixels[1][0]);
+        p.image = pixels;
+        dbg!(width,height);
+        p.image_width = width;
+        p.image_height = height;
+
+        Some(p)
+    } else {
+        None
+    }
 }
 
 

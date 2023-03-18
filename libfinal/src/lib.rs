@@ -20,6 +20,9 @@ pub mod transform3d;
 pub mod typography;
 pub mod utiles;
 pub mod render_gl;
+pub mod rendering;
+pub mod getsdl2;
+
 
 
 

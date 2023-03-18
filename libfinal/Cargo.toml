@@ -11,7 +11,7 @@ rand = "0.7.2"
 perlin_noise = "1.0.1"
 glam = "0.23.0"
 gl = "0.14.0"
-
+zimage = { version = "0.24.5", package = "image" }
 
 
 

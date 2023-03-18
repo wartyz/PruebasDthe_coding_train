@@ -26,12 +26,17 @@ use std::{str, mem, ptr};
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
-use sdl2::render::Canvas;
-use sdl2::video::Window;
+use sdl2::render::{Canvas, Texture, TextureCreator};
+use sdl2::video::{Window, WindowContext};
 
 use crate::engine::Engine;
 
 use gl::types::{GLfloat, GLenum, GLuint, GLint, GLchar, GLsizeiptr, GLsizei, GLvoid, GLboolean};
+use sdl2::pixels::Color;
+use sdl2::pixels::PixelFormatEnum::ABGR8888;
+use sdl2::rect::{Point, Rect};
+use sdl2::surface;
+use sdl2::surface::Surface;
 
 use crate::parametros::Parametros;
 use crate::render_gl;
@@ -104,9 +109,10 @@ pub fn size(engine: &mut Engine, ancho: u32, alto: u32) -> Canvas<Window> {
     //let _event_pump = sdl_context.event_pump().expect("¡Error al obtener la bomba de eventos SDL2!");
 
     // let _surface = canvas.window().surface(&event_pump);
+
     //let _texture_creator = canvas.texture_creator();
 
-    let c = sdl2::pixels::Color::RGB(
+    let c = Color::RGB(
         engine.param.color_background.r,
         engine.param.color_background.g,
         engine.param.color_background.b,
