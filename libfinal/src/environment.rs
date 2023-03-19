@@ -22,21 +22,15 @@
  */
 
 use std::ffi::CString;
-use std::{str, mem, ptr};
+use std::{mem, ptr};
 
-use sdl2::event::Event;
-use sdl2::keyboard::Keycode;
-use sdl2::render::{Canvas, Texture, TextureCreator};
-use sdl2::video::{Window, WindowContext};
+use sdl2::render::Canvas;
+use sdl2::video::Window;
 
 use crate::engine::Engine;
 
 use gl::types::{GLfloat, GLenum, GLuint, GLint, GLchar, GLsizeiptr, GLsizei, GLvoid, GLboolean};
 use sdl2::pixels::Color;
-use sdl2::pixels::PixelFormatEnum::ABGR8888;
-use sdl2::rect::{Point, Rect};
-use sdl2::surface;
-use sdl2::surface::Surface;
 
 use crate::parametros::Parametros;
 use crate::render_gl;

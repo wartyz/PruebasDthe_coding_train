@@ -1,8 +1,9 @@
 use std::f32::consts::PI;
+use libfinal::color::{background, fill1, stroke1};
 use libfinal::engine::{Canvas, Engine, Window};
-use libfinal::environment::full_screen;
-use libfinal::rendering;
 use libfinal::rendering::{create_graphics, PGraphics};
+use libfinal::shape::{ellipse, line, stroke_weight};
+use libfinal::transform::translate;
 
 // Ancho y alto de la pantalla
 pub const ANCHO: u32 = 900;
@@ -29,7 +30,7 @@ pub struct Sketch {
     cx: f32,
     cy: f32,
 
-    canvas: PGraphics,
+    pgraphics: PGraphics,
 }
 
 impl Default for Sketch {
@@ -57,7 +58,7 @@ impl Sketch {
         let cx = ANCHO as f32 / 2.;
         let cy = 200.; //centre of x and y for background
 
-        let canvas = create_graphics(ANCHO, ALTO); // canvas is just a variable name DO NOT CONFUSE IT WITH P5.JS
+        let pgraphics = create_graphics(); // canvas is just a variable name DO NOT CONFUSE IT WITH P5.JS
 
         engine.param.ancho = ANCHO as f32;
         engine.param.alto = ALTO as f32;
@@ -77,7 +78,7 @@ impl Sketch {
             py2,
             cx,
             cy,
-            canvas,
+            pgraphics,
         }
     }
     pub fn pre_load(&mut self) {
@@ -85,9 +86,9 @@ impl Sketch {
     }
     // Función setup() de javascript
     pub fn setup(&mut self) {
-        self.canvas.begin_draw();
-        self.canvas.background();
-        self.canvas.end_draw();
+        // self.canvas.begin_draw();
+        // self.canvas.background();
+        // self.canvas.end_draw();
     }
 
     pub fn update(&mut self) -> bool {
@@ -98,5 +99,54 @@ impl Sketch {
     }
 
     // Función draw() de javascript
-    pub fn draw(&mut self, _canvas: &mut Canvas<Window>) {}
+    pub fn draw(&mut self, canvas: &mut Canvas<Window>) {
+        background(canvas, &mut self.engine, 255);
+        translate(self.cx, self.cy, &mut self.engine.param);
+        self.pgraphics.presenta_pixels(canvas, &mut self.engine.param);
+
+        // numerators are moduled
+        let mut num1: f32 = -self.g * (2. * self.m1 + self.m2) * (self.a1).sin();
+        let mut num2: f32 = -self.m2 * self.g * (self.a1 - 2. * self.a2).sin();
+        let mut num3: f32 = -2. * (self.a1 - self.a2).sin() * self.m2;
+        let mut num4: f32 = self.a2_v * self.a2_v * self.r2 + self.a1_v * self.a1_v * self.r1 * (self.a1 - self.a2).cos();
+        let mut den: f32 = self.r1 * (2. * self.m1 + self.m2 - self.m2 * (2. * self.a1 - 2. * self.a2).cos());
+        let a1_a: f32 = (num1 + num2 + num3 * num4) / den;
+
+        num1 = 2. * (self.a1 - self.a2).sin();
+        num2 = self.a1_v * self.a1_v * self.r1 * (self.m1 + self.m2);
+        num3 = self.g * (self.m1 + self.m2) * (self.a1).cos();
+        num4 = self.a2_v * self.a2_v * self.r2 * self.m2 * (self.a1 - self.a2).cos();
+        den = self.r2 * (2. * self.m1 + self.m2 - self.m2 * (2. * self.a1 - 2. * self.a2).cos());
+        let a2_a: f32 = (num1 * (num2 + num3 + num4)) / den;
+
+        stroke1(0., &mut self.engine.param);
+        stroke_weight(2, &mut self.engine.param);
+
+        let x1: f32 = self.r1 * (self.a1).sin();
+        let y1 = self.r1 * (self.a1).cos();
+
+        let x2 = x1 + self.r2 * (self.a2).sin();
+        let y2 = y1 + self.r2 * (self.a2).cos();
+
+        line(canvas, &mut self.engine.param, 0., 0., x1, y1);
+        fill1(0., &mut self.engine.param);
+        ellipse(canvas, &mut self.engine.param, x1, y1, self.m1, self.m1);
+
+        line(canvas, &mut self.engine.param, x1, y1, x2, y2);
+        fill1(0., &mut self.engine.param);
+        ellipse(canvas, &mut self.engine.param, x2, y2, self.m2, self.m2);
+
+        self.a1_v += a1_a;
+        self.a2_v += a2_a;
+        self.a1 += self.a1_v;
+        self.a2 += self.a2_v;
+        // as momentum increases  , slowly pendulum comes to rest
+        // a1_v *= 0.99; // for drag
+        // a2_v *= 0.99; // for drag
+
+        self.pgraphics.set_points(self.px2, self.py2, x2, y2);
+
+        self.px2 = x2;
+        self.py2 = y2;
+    }
 }

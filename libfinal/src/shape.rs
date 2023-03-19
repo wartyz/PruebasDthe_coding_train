@@ -47,16 +47,13 @@ Loading & Display
     shape()
 */
 
-use std::ops::Mul;
 use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::pixels::Color;
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use crate::parametros::{ModosBeginShape, Parametros, RectMode};
 use crate::matem::*;
 use crate::parametros::ModosBeginShape::{Close, Lines};
-use crate::transform::{identity3x3, Matrix3x3};
 
 // Shape ************************************
 struct _PShape {}

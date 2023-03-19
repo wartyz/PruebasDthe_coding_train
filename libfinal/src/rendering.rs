@@ -38,16 +38,17 @@ Shaders
 
  */
 
+use sdl2::pixels::PixelFormatEnum::ARGB8888;
+use sdl2::rect::Rect;
 pub use sdl2::render::{Canvas, Texture, TextureCreator};
-use sdl2::surface::Surface;
-use sdl2::video::{Window, WindowContext};
-use crate::color::background;
+use sdl2::render::BlendMode;
+use sdl2::video::Window;
+use crate::parametros::Parametros;
+use crate::shape::line;
 
 pub struct PGraphics {
-    ancho: u32,
-    alto: u32,
-    pixels: Vec<u32>,
-
+    // Vector que crece con los puntos que recibe
+    coord: Vec<(f32, f32, f32, f32)>,
 }
 
 impl PGraphics {
@@ -66,23 +67,11 @@ pub fn blend_mode() { unimplemented!(); }
 
 pub fn clip() { unimplemented!(); }
 
-pub fn create_graphics<'a>(ancho: u32, alto: u32) -> PGraphics {
-    let mut pixels = Vec::with_capacity((ancho * alto) as usize);
-    for _ in 0..(ancho * alto) {
-        pixels.push(0);
-    }
-
-    // let texture = texture_creator.create_texture_streaming(
-    //     sdl2::pixels::PixelFormatEnum::ABGR8888,
-    //     ancho,
-    //     alto,
-    // );
+pub fn create_graphics() -> PGraphics {
+    let coord = vec![];
 
     PGraphics {
-        ancho,
-        alto,
-        pixels,
-
+        coord,
     }
 }
 
@@ -99,4 +88,18 @@ pub fn load_shader() { unimplemented!(); }
 pub fn reset_shader() { unimplemented!(); }
 
 pub fn shader() { unimplemented!(); }
+
+// Funciones creadas por mi
+impl PGraphics {
+    pub fn set_points(&mut self, x0: f32, y0: f32, x1: f32, y1: f32) {
+        self.coord.push((x0, y0, x1, y1));
+    }
+
+    /// Dibuja las lineas con los puntos que estan en self.coord
+    pub fn presenta_pixels(&self, canvas: &mut Canvas<Window>, param: &mut Parametros) {
+        for p in &self.coord {
+            line(canvas, param, p.0, p.1, p.2, p.3);
+        }
+    }
+}
 

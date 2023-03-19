@@ -15,11 +15,6 @@ use sdl2::surface::Surface;
 use sdl2::video::{Window, WindowContext};
 use sdl2::image::LoadTexture;
 
-use zimage::io::Reader as ImageReader;
-use zimage::GenericImageView;
-
-use crate::image::{PImage, pimage_vacio};
-
 // Crea una Texture de ancho por alto
 pub fn get_texture(ancho: u32, alto: u32, texture_creator: &mut TextureCreator<WindowContext>) -> Texture {
     texture_creator.create_texture_streaming(None, ancho, alto).unwrap()

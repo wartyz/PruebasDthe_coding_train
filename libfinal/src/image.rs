@@ -80,14 +80,12 @@ texturas
  */
 use crate::color::PColor;
 use sdl2::image::LoadTexture;
-use sdl2::pixels::PixelFormatEnum::{ARGB8888, BGRA8888};
+use sdl2::pixels::PixelFormatEnum::ARGB8888;
 use sdl2::rect::Rect;
-use sdl2::render::{BlendMode, Canvas, Texture, TextureCreator, WindowCanvas};
-use sdl2::surface::Surface;
+use sdl2::render::{BlendMode, Canvas, Texture, TextureCreator};
+
 use sdl2::video::Window;
-use std::error::Error;
-use std::path::Path;
-use sdl2::pixels::PixelFormatEnum;
+
 use zimage::GenericImageView;
 use crate::matem::pvector3;
 use crate::parametros::{Filtros, ImageMode, Parametros};

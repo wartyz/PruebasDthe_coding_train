@@ -1,17 +1,8 @@
-use std::thread;
-use crate::matem::{pvector3, PVector3, sub_s};
-use crate::transform3d::{identity4x4, Matrix4x4};
-use crate::transform::mul_escalar;
-
-use glam::{Mat4, Vec3, Affine2, Affine3A};
+use glam::{Mat4, Vec3};
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::gfx::primitives::DrawRenderer;
-use sdl2::libc::rand;
-use sdl2::rect::{Point, Rect};
-use crate::matem;
-use crate::parametros::Parametros;
 
 pub struct Camera {
     pub eye: Vec3,
@@ -122,7 +113,7 @@ impl Camera {
         let p = 200.;  // factor de multiplicación
 
         // Crear cámara
-        let mut camara = Camera::new(anch as f32, alto as f32);
+        let camara = Camera::new(anch as f32, alto as f32);
 
         // Obtener la matriz de total del cubo (puede ser rotada, escalada, etc.)
         let t = Vec3::new(0.0, 0.0, -500.0); // ¿muevo el eje de coordenadas?
@@ -142,7 +133,7 @@ impl Camera {
 
         for i in 0..8 {
             let nuevo = vertices[i] * p;
-            let vv = (transform.transform_point3(nuevo) + Vec3::new(an, al, 0.));
+            let vv = transform.transform_point3(nuevo) + Vec3::new(an, al, 0.);
             v_mod.push((vv.x as i16, vv.y as i16, vv.z as i16))
         }
         canvas.set_draw_color(Color::RGBA(255, 0, 255, 255));
@@ -159,7 +150,7 @@ impl Camera {
             let b = Vec3::new(b_x, b_y, b_z);
 
             // Calculo de la distancia de la cámara al baricentro en el eje z
-            let d = (b - camara.eye);
+            let d = b - camara.eye;
 
             //dbg!(d);
             distancias.push(d.z);
@@ -278,7 +269,7 @@ impl Camera {
         let p = 200.;  // factor de multiplicación
 
         // Crear cámara
-        let mut camara = Camera::new(anch as f32, alto as f32);
+        let camara = Camera::new(anch as f32, alto as f32);
 
         // Obtener la matriz de total del cubo (puede ser rotada, escalada, etc.)
         let t = Vec3::new(0.0, 0.0, -500.0); // ¿muevo el eje de coordenadas?
@@ -298,7 +289,7 @@ impl Camera {
 
         for i in 0..8 {
             let nuevo = vertices[i] * p;
-            let vv = (transform.transform_point3(nuevo) + Vec3::new(an, al, 0.));
+            let vv = transform.transform_point3(nuevo) + Vec3::new(an, al, 0.);
             v_mod.push((vv.x as i16, vv.y as i16, vv.z as i16))
         }
         canvas.set_draw_color(Color::RGBA(255, 0, 255, 255));
@@ -315,7 +306,7 @@ impl Camera {
             let b = Vec3::new(b_x, b_y, b_z);
 
             // Calculo de la distancia de la cámara al baricentro en el eje z
-            let d = (b - camara.eye);
+            let d = b - camara.eye;
 
             //dbg!(d);
             distancias.push(d.z);
