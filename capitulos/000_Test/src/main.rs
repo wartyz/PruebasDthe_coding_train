@@ -1,6 +1,6 @@
 use libfinal::color::{fill3, stroke3};
 use libfinal::getsdl2::*;
-use libfinal::image::{load_image_bmp, load_image_png, PImage};
+use libfinal::image::{load_image_bmp, load_image, PImage};
 use libfinal::shape::{arc, ellipse};
 use sketch::Sketch;
 use std::env::current_dir;
@@ -24,45 +24,41 @@ fn main() {
 
         _ => ()
     }
-    test03();
 }
 
 fn test01() {
-    //let mut zz = 0; // para debug
+    /*//let mut zz = 0; // para debug
     let mut game = Sketch::new();
     //game.pre_load(); // Se ejecuta antes que setup()
 
-    let mut _canvas = size_opengl(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
+    let mut canvas = size_opengl(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
 
     game.setup();
     // Carga un vector de 482 elementos, cada elemento tiene un vector de 500 elementos, cada elemento tien 4 bytes
-    //let mut pimage = PImage::load_image(&mut canvas, "resources/imagenes/papa32bits.bmp").unwrap();
+    let mut pimage = load_image_bmp(&mut canvas, "resources/imagenes/papa32bits.bmp").unwrap();
     // Bucle principal ***********************************************************************
     'main_loop: loop {
         if !game.update() {
             break 'main_loop;
         }
         // Arreglo interno a ventana
-        //pimage.update_pixels(&mut canvas); // cuenta tamaño igual a alto
-        //game.draw(&mut canvas);
-        // Ventana a arreglo interno
-        //pimage.load_pixels(&mut canvas); // cuenta tamaño igual a ancho
-        // for i in 0..100 {
-        //     // BGRA
-        //     pimage.image[i] = vec![(0, 0, 255, 0), (0, 0, 255, 0), (0, 0, 255, 0), (0, 0, 255, 0)];
-        // }
-        //canvas.present();
-        //dbg!(zz);
-        //zz += 1;
-        //dbg!("para breakpoint");
-    }
+        pimage.update_pixels(&mut canvas); // cuenta tamaño igual a alto
+        game.draw(&mut canvas);
+        //Ventana a arreglo interno
+        pimage.load_pixels(&mut canvas); // cuenta tamaño igual a ancho
+        for i in 0..100 {
+            // BGRA
+            pimage.image[i] = vec![(0, 0, 255, 0), (0, 0, 255, 0), (0, 0, 255, 0), (0, 0, 255, 0)];
+        }
+        canvas.present();
+    }*/
 }
 
 fn test02() {
     let mut game = Sketch::new();
     //game.pre_load(); // Se ejecuta antes que setup()
 
-    let mut _canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
+    let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
 
     game.setup();
 
@@ -72,23 +68,23 @@ fn test02() {
             break 'main_loop;
         }
         // Angulo 90 grados
-        //let radianes = 90. * PI / 180.;
-        // arc(
-        //     &mut canvas,
-        //     &mut game.engine.param,
-        //     400.,
-        //     400.,
-        //     150.,
-        //     0.,
-        //     radianes,
-        // );
-        // //game.draw(&mut canvas);
-        //
-        // stroke3(255., 0., 0., &mut game.engine.param);
-        // fill3(255., 255., 0., &mut game.engine.param);
-        // ellipse(&mut canvas, &mut game.engine.param, 400., 400., 100., 200.);
-        //
-        // canvas.present();
+        let radianes = 90. * PI / 180.;
+        arc(
+            &mut canvas,
+            &mut game.engine.param,
+            400.,
+            400.,
+            150.,
+            0.,
+            radianes,
+        );
+        //game.draw(&mut canvas);
+
+        stroke3(255., 0., 0., &mut game.engine.param);
+        fill3(255., 255., 0., &mut game.engine.param);
+        ellipse(&mut canvas, &mut game.engine.param, 400., 400., 100., 200.);
+
+        canvas.present();
     }
 }
 
@@ -118,25 +114,25 @@ fn test03() {
 }
 
 fn test04() {
-    // let mut game = Sketch::new();
-    // //game.pre_load(); // Se ejecuta antes que setup()
-    //
-    // let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
-    //
-    // game.setup();
-    // let camera = Camera::new();
-    //
-    // // Bucle principal ***********************************************************************
-    // 'main_loop: loop {
-    //     if !game.update() {
-    //         break 'main_loop;
-    //     }
-    //     Camera::dibujar_cubo(&mut canvas, &mut game.engine.param);
-    //
-    //     //game.draw(&mut canvas);
-    //
-    //     canvas.present();
-    // }
+    let mut game = Sketch::new();
+    //game.pre_load(); // Se ejecuta antes que setup()
+
+    let mut canvas = size(&mut game.engine, sketch::ANCHO as u32, sketch::ALTO as u32);
+
+    game.setup();
+    let _camera = Camera::new(0.0, 0.0);
+
+    // Bucle principal ***********************************************************************
+    'main_loop: loop {
+        if !game.update() {
+            break 'main_loop;
+        }
+        Camera::dibujar_cubo(&mut canvas, 10.);
+
+        //game.draw(&mut canvas);
+
+        canvas.present();
+    }
 }
 
 fn test05() {
@@ -235,7 +231,7 @@ fn test07() {
     //     get_texture_de_bytes(&mut texture_creator3);
 
     //let png_file = read_png_file("resources/imagenes/papa.png");
-    let pimage0 = load_image_png("resources/imagenes/papa32bits.png").unwrap();
+    let pimage0 = load_image("resources/imagenes/papa.jpg").unwrap();
 
     game.setup();
 

@@ -541,7 +541,7 @@ pub fn renderiza(canvas: &mut Canvas<Window>, param: &mut Parametros, x_vieja: f
     canvas.copy(&texture, Some(sce), Some(dst));
 }
 
-// Carga una imagen en una variable de tipo PImage.
+/*// Carga una imagen en una variable de tipo PImage usando image de SDL2.
 // Solo carga .bmp   debe ser de formato ARGB8888 osea 32 bits
 pub fn load_image_bmp(
     canvas: &mut Canvas<Window>,
@@ -602,13 +602,13 @@ pub fn load_image_bmp(
         image_height,
         tint: (255, 255, 255),
     })
-}
+}*/
 
-// Desde un fichero png, crea PImage
-pub fn load_image_png(filename: &str) -> Option<PImage> {
+// Desde un fichero gráfico (png,bmp,jpg), crea PImage usando el crate image (renombrado pimage)
+pub fn load_image(filename: &str) -> Option<PImage> {
     let mut p = pimage_vacio();
-    let format = zimage::guess_format(filename.as_bytes());
-    dbg!(format);
+    // let format = zimage::guess_format(filename.as_bytes());
+    // dbg!(format);
     if let Ok(pimage) = zimage::open(filename) { // ImageReader::open(filename) {
         //let (width, height) = pimage.into_dimensions().unwrap();
 
@@ -625,17 +625,18 @@ pub fn load_image_png(filename: &str) -> Option<PImage> {
             //for x in 0..width {
             for y in 0..height {
                 let pixel = pimage.get_pixel(x, y);
+
                 // Es RGBA y hay que pasarlo a BGRA para que lo puedan leer las otras funciones
                 row.push((pixel[2], pixel[1], pixel[0], pixel[3]));
             }
             pixels.push(row);
         }
-        dbg!(pixels.len());
-        dbg!(pixels[0].len());
-        dbg!(pixels[0][0]);
-        dbg!(pixels[1][0]);
+        // dbg!(pixels.len());
+        // dbg!(pixels[0].len());
+        // dbg!(pixels[0][0]);
+        // dbg!(pixels[1][0]);
         p.image = pixels;
-        dbg!(width,height);
+        //dbg!(width,height);
         p.image_width = width;
         p.image_height = height;
 
