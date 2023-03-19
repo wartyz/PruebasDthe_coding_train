@@ -26,5 +26,6 @@ members = [
     "capitulos/088_Snowfall",
     "capitulos/089_Langtonsant",
     "capitulos/090_Floyd-Steinberg_Dithering",
-    "capitulos/093_DoublePendulum"
+    "capitulos/093_DoublePendulum",
+    "capitulos/102_WaterRipples"
 ]

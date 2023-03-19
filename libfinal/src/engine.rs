@@ -69,9 +69,20 @@ impl Engine {
                     mouse_btn: MouseButton::Left,
                     ..
                 } => {
-                    //println!("MouseButtonDown");
+                    println!("MouseButtonDown");
 
-                    self.param.mouse_boton_mantiene = CodigosRaton::Izquierdo;
+                    self.param.mouse_boton_inicio = CodigosRaton::Izquierdo;
+                }
+
+                Event::MouseButtonUp {
+                    x: _,
+                    y: _,
+                    mouse_btn: MouseButton::Left,
+                    ..
+                } => {
+                    println!("MouseButtonUp");
+
+                    self.param.mouse_boton_final = CodigosRaton::Izquierdo;
                 }
                 Event::MouseMotion { x, y, .. } => {
                     //println!("MouseMotion");
